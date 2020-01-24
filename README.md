@@ -72,75 +72,85 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 
 ## Wireframes
 
-<img src='https://media.giphy.com/media/dv7BUjMGA6WJppyRdn/giphy.gif'/>
+<a href='https://photos.app.goo.gl/A6iCJ9dMjb6chRi16'><img src='https://media.giphy.com/media/dv7BUjMGA6WJppyRdn/giphy.gif'/></a>
 
 ### MVP
 
-Carefully decided what is placed into your MVP as the client will expect this functionality to be implemented upon project completion.  
-
-#### MVP EXAMPLE:
-- Find and use external api 
-- Render data on page 
-- Allow user to choose favorites 
-- Save their choices in firebase
+- Build App as class component
+- Make use of Rick and Morty API
+- Present player with a menu
+- Allow player to either fly to a new location or trade items/money 
+- Create game objectives and game over state (goal will be to pay back loan shark with earnings made during game)
+- Use local storage to save player state
+- Allow user to wipe local storage saved state to play again
+- Create hard coded list of tradeable items
 
 ### Post-MVP
 
-List any additional functionality you would like to implement once MVP has been reached.
-
-#### PostMVP EXAMPLE:
-- Add user auth
+- Convert App to functional component
+- Allow players to visit other characters in each location
+- Incorporate tradeable items/creatures from another API as rare finds (eg pokemon)
+- Incorporate natural language API and convert to text based controls (from button based)
+- Graph value of each item over time
+- Add sounds from RM 
+- Add quotes from RM
 
 ## React Component Hierarchy
 
-Include an image of your component hierarchy that shows the data flow and architectural design of your app.
+<a href='https://photos.app.goo.gl/eR6BKLCXi7Zc2QCU9'><img src='https://media.giphy.com/media/WpV4yAkqm6h7Nmu6j2/giphy.gif'/></a>
 
 ## Components
 
-Based on the initial logic defined in the previous section, try to breakdown the logic further into stateless/stateful components. 
 
 | Component | Description |Type |
 | --- | --- | --- |
-| Header | The Header receives props that render multiple nav titles and links | Functional |
-| Main | This component houses multiple rendered views through React Router and controls data received from the initial API call in state | Class |
+| App | Will maintain state for entire app and contain routing | Class |
+| HeaderUI | Will recieve current money balance as a prop | Functional |
+| MainRender | Will contain the rendering components | Functional |
+| Background | Renders the current background | Functional |
+| Character | Renders the player and current character images | Functional |
+| TalkBubble | Renders talk bubbles if active | Functional |
+| MainMenu | Will contain the menu buttons | Functional |
+| MenuButtons | Will present the main options to the player (Trade, Fly and Talk) | Functional |
+| MainMenu | Will give the option to move between menus | Functional |
+
 
 ## Priority Matrix
 
-Include an image of your Priority Matrix (X is time and Y is priority)
+<a href='https://photos.app.goo.gl/U1L7YrX67qDwGSX39'><img src='https://media.giphy.com/media/dXQn9l4SkcjtR1wwA5/giphy.gif'/></a>
 
 ## Timeframes
-
-Timeframes are key in the development cycle. You have limited time to code and so much to accomplish!  Look at all of your planned files and components, and all of the areas of development you are planning and give an estimate of how long each one will take to complete. It's always best to pad the time to account for the unknown, so be sure to add an additional hour or two to play it safe. As you progress, you can update the "Time Invested" column to keep track of your hours, but that number should turn into "Actual Time" by the presentation day. Also, put a winter-themed gif at the top of your readme before you pitch to show you read the instructions thoroughly.
 
 
 | Component | Priority | Estimated Time | Time Invested | Actual Time |
 | --- | :---: |  :---: | :---: | :---: |
-| Adding Form | H | 3hrs| 3.5hrs | 3.5hrs |
-| Working with API | H | 3hrs| 2.5hrs | 2.5hrs |
-| Total | H | 6hrs| 5hrs | 5hrs |
+| API Call | H | 2hrs| -hrs | -hrs |
+| Basic Layout | H | 4hrs| -hrs | -hrs |
+| Base CSS | M | 4hrs| -hrs | -hrs |
+| Game Loop | H | 5hrs| -hrs | -hrs |
+| Clickable model | H | 4hrs| -hrs | -hrs |
+| Polished CSS | M | 8hrs| -hrs | -hrs |
+| Game Win and Lose and onboarding | H | 8hrs| -hrs | -hrs |
+| Total | H | 35hrs| -hrs | -hrs |
 
 ## Project Schedule
-
-This schedule will be used to keep track of your progress throughout the week and align with our expectations.  
-
-You are **responsible** for scheduling time with your squad to seek approval for each deliverable by the end of the corresponding day, excluding `Saturday` and `Sunday`.
 
 |  Day | Deliverable | Status
 |---|---| ---|
 |Jan 24th| Project Pitch / Wireframes / Priority Matrix / Functional Components | Incomplete
-|Jan 27th| Core Application Structure (HTML, CSS, etc.) | Incomplete
-|Jan 28th| Pseudocode / actual code | Incomplete
-|Jan 29th| Initial Clickable Model  | Incomplete
-|Jan 30th| MVP | Incomplete
+|Jan 27th| PsuedoCode, Explore Data Structure and White Boarding | Incomplete
+|Jan 28th| Actual code and Initial Clickable Model | Incomplete
+|Jan 29th| MVP  | Incomplete
+|Jan 30th| POST MVP | Incomplete
 |Jan 31tst| Present | Incomplete
 
 ## Additional Libraries
 
-Use this section to list all supporting libraries and thier role in the project. React Router Dom and Axios should be listed here at the very least.
+Will probably look to use c3.js if I am able to get to the graphing portion
 
 ## Issues and Resolutions
 
-Use this section to list of all major issues you anticipate encountering during development and how you plan to tackle them. Be sure to update this section during development, documenting the actual resolutions you inacted, as well as any other unexpected obstacles you encountered along the way.
+Potential issue is locations do not come with images, thus will need to be hard coded. To address I will limit the scope of locations a player can travel to while sourcing background images by hand. The same applies to items to be traded, though the number of those will probably be limited to 5 or less thus will not present as much of an issue.
 
 ## Code Snippet
 
@@ -153,4 +163,4 @@ function reverse(string) {
 ```
 
 ## Change Log
- Use this section to document what changes were made in your overall planning and the reasoning behind those changes.  
+Initial edit: TJSH Friday Jan 24  
