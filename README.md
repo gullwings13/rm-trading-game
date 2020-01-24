@@ -1,68 +1,156 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Project Overview
 
-## Available Scripts
+## Rick and Morty Trading Game
+Travel to different Rick and Morty locations and trade items so you can pay back some debt
 
-In the project directory, you can run:
+**Project decription:** I plan to make a single page game that lets the player explore the RM universe and trade items. This will use the rick and morty api
 
-### `yarn start`
+## API Snippet
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+{
+    "info": {
+        "count": 493,
+        "pages": 25,
+        "next": "https://rickandmortyapi.com/api/character/?page=2",
+        "prev": ""
+    },
+    "results": [
+        {
+            "id": 1,
+            "name": "Rick Sanchez",
+            "status": "Alive",
+            "species": "Human",
+            "type": "",
+            "gender": "Male",
+            "origin": {
+                "name": "Earth (C-137)",
+                "url": "https://rickandmortyapi.com/api/location/1"
+            },
+            "location": {
+                "name": "Earth (Replacement Dimension)",
+                "url": "https://rickandmortyapi.com/api/location/20"
+            },
+            "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            "episode": [
+                "https://rickandmortyapi.com/api/episode/1",
+                "https://rickandmortyapi.com/api/episode/2",
+                "https://rickandmortyapi.com/api/episode/3",
+                "https://rickandmortyapi.com/api/episode/4",
+                "https://rickandmortyapi.com/api/episode/5",
+                "https://rickandmortyapi.com/api/episode/6",
+                "https://rickandmortyapi.com/api/episode/7",
+                "https://rickandmortyapi.com/api/episode/8",
+                "https://rickandmortyapi.com/api/episode/9",
+                "https://rickandmortyapi.com/api/episode/10",
+                "https://rickandmortyapi.com/api/episode/11",
+                "https://rickandmortyapi.com/api/episode/12",
+                "https://rickandmortyapi.com/api/episode/13",
+                "https://rickandmortyapi.com/api/episode/14",
+                "https://rickandmortyapi.com/api/episode/15",
+                "https://rickandmortyapi.com/api/episode/16",
+                "https://rickandmortyapi.com/api/episode/17",
+                "https://rickandmortyapi.com/api/episode/18",
+                "https://rickandmortyapi.com/api/episode/19",
+                "https://rickandmortyapi.com/api/episode/20",
+                "https://rickandmortyapi.com/api/episode/21",
+                "https://rickandmortyapi.com/api/episode/22",
+                "https://rickandmortyapi.com/api/episode/23",
+                "https://rickandmortyapi.com/api/episode/24",
+                "https://rickandmortyapi.com/api/episode/25",
+                "https://rickandmortyapi.com/api/episode/26",
+                "https://rickandmortyapi.com/api/episode/27",
+                "https://rickandmortyapi.com/api/episode/28",
+                "https://rickandmortyapi.com/api/episode/29",
+                "https://rickandmortyapi.com/api/episode/30",
+                "https://rickandmortyapi.com/api/episode/31"
+            ],
+            "url": "https://rickandmortyapi.com/api/character/1",
+            "created": "2017-11-04T18:48:46.250Z"
+        },
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Wireframes
 
-### `yarn test`
+Display all wireframes here with any neccessary descriptions.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### MVP
 
-### `yarn build`
+Carefully decided what is placed into your MVP as the client will expect this functionality to be implemented upon project completion.  
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### MVP EXAMPLE:
+- Find and use external api 
+- Render data on page 
+- Allow user to choose favorites 
+- Save their choices in firebase
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Post-MVP
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+List any additional functionality you would like to implement once MVP has been reached.
 
-### `yarn eject`
+#### PostMVP EXAMPLE:
+- Add user auth
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## React Component Hierarchy
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Include an image of your component hierarchy that shows the data flow and architectural design of your app.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Components
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Based on the initial logic defined in the previous section, try to breakdown the logic further into stateless/stateful components. 
 
-## Learn More
+| Component | Description |Type |
+| --- | --- | --- |
+| Header | The Header receives props that render multiple nav titles and links | Functional |
+| Main | This component houses multiple rendered views through React Router and controls data received from the initial API call in state | Class |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Priority Matrix
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Include an image of your Priority Matrix (X is time and Y is priority)
 
-### Code Splitting
+## Timeframes
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Timeframes are key in the development cycle. You have limited time to code and so much to accomplish!  Look at all of your planned files and components, and all of the areas of development you are planning and give an estimate of how long each one will take to complete. It's always best to pad the time to account for the unknown, so be sure to add an additional hour or two to play it safe. As you progress, you can update the "Time Invested" column to keep track of your hours, but that number should turn into "Actual Time" by the presentation day. Also, put a winter-themed gif at the top of your readme before you pitch to show you read the instructions thoroughly.
 
-### Analyzing the Bundle Size
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+| Component | Priority | Estimated Time | Time Invested | Actual Time |
+| --- | :---: |  :---: | :---: | :---: |
+| Adding Form | H | 3hrs| 3.5hrs | 3.5hrs |
+| Working with API | H | 3hrs| 2.5hrs | 2.5hrs |
+| Total | H | 6hrs| 5hrs | 5hrs |
 
-### Making a Progressive Web App
+## Project Schedule
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+This schedule will be used to keep track of your progress throughout the week and align with our expectations.  
 
-### Advanced Configuration
+You are **responsible** for scheduling time with your squad to seek approval for each deliverable by the end of the corresponding day, excluding `Saturday` and `Sunday`.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+|  Day | Deliverable | Status
+|---|---| ---|
+|Jan 24th| Project Pitch / Wireframes / Priority Matrix / Functional Components | Incomplete
+|Jan 27th| Core Application Structure (HTML, CSS, etc.) | Incomplete
+|Jan 28th| Pseudocode / actual code | Incomplete
+|Jan 29th| Initial Clickable Model  | Incomplete
+|Jan 30th| MVP | Incomplete
+|Jan 31tst| Present | Incomplete
 
-### Deployment
+## Additional Libraries
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+Use this section to list all supporting libraries and thier role in the project. React Router Dom and Axios should be listed here at the very least.
 
-### `yarn build` fails to minify
+## Issues and Resolutions
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Use this section to list of all major issues you anticipate encountering during development and how you plan to tackle them. Be sure to update this section during development, documenting the actual resolutions you inacted, as well as any other unexpected obstacles you encountered along the way.
+
+## Code Snippet
+
+Use this section to include a brief code snippet you are proud of, along with a brief description of why.
+
+```
+function reverse(string) {
+	// here is the code to reverse a string of text
+}
+```
+
+## Change Log
+ Use this section to document what changes were made in your overall planning and the reasoning behind those changes.  
