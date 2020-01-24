@@ -72,7 +72,7 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 
 ## Wireframes
 
-Display all wireframes here with any neccessary descriptions.
+<img src='https://media.giphy.com/media/dv7BUjMGA6WJppyRdn/giphy.gif'/>
 
 ### MVP
 
