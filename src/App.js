@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import Header from './components/Header'
+import Main from './components/Main'
+import { queryAPI } from './services/api-services'
+import { Route } from 'react-router-dom'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component
+{
+  constructor(props)
+  {
+    super(props)
+    this.state = {
+      locations: []
+    }
+  }
+
+  componentDidMount()
+  {
+    this.locationQuery()
+  }
+
+  locationQuery = async () =>
+  {
+    let queryResult = await queryAPI('https://rickandmortyapi.com/api/location/1,2,3,4,5')
+    this.setState({
+      locations: queryResult
+    })
+    console.log(queryResult)
+  }
+
+
+  render()
+  {
+    return (
+      <div>
+        <Header />
+        <Route exact path='/' component={() => (<Main />)} />
+      </div>
+    )
+  }
 }
 
-export default App;
+export default App
