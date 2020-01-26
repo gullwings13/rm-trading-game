@@ -1,5 +1,6 @@
 *{
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: 'Lilita One', cursive;
     margin: 0;
     padding: 0;
 }
@@ -97,10 +98,15 @@ h1,h2,h3,h4,h5{
 
 .main-menu-button-container
 {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     padding: 0 0 10px 0;
+    width: 240px;
+    height: 80px;
 }
 
-.main-menu-button, .main-menu-sub-button{
+.main-menu-button, .main-menu-side-button{
     border: 1px solid black;
     border-radius: 3px;
 }
@@ -108,16 +114,16 @@ h1,h2,h3,h4,h5{
 .main-menu-button{
     height: 80px;
     width: 120px;
+    font-size: 20px;
 }
 
-.main-menu-sub-button{
-    height: 60px;
-    width: 80px;
+.main-menu-side-button{
+    height: 50px;
+    width: 60px;
     transform: rotate(90deg);
 }
 
-
-.fade-appear{
+/* .fade-appear{
     opacity: 0;
 }
 
@@ -156,4 +162,4 @@ h1,h2,h3,h4,h5{
 .fade-leave-active{
     opacity: 0;
     transition: opacity 500ms ease-out;
-}
+} */

@@ -5,7 +5,6 @@ import { Route } from 'react-router-dom'
 
 import Header from './components/header/Header'
 import Main from './components/Main'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 
 
@@ -27,17 +26,69 @@ class App extends Component
       currentLocationDetails: [],
       rickAndMortyCharacter: rickAndMortyCharacter,
       currentCharacter: characterArray[0],
+      prevSubMenu: MainMenuCurrentSubMenuEnum.portal,
       currentSubMenu: MainMenuCurrentSubMenuEnum.portal,
+      nextSubMenu: MainMenuCurrentSubMenuEnum.portal,
       currentMainMenuOpen: false,
-      currentMenuDisplayArray: [1, 2, 3]
+      currentMenuDisplayArray: [[
+        { name: 'Portal', click: this.mainMenuClick },
+        { name: 'Trade', click: this.mainMenuClick },
+        { name: 'Talk', click: this.mainMenuClick },
+      ]]
     }
+  }
+
+
+
+  getButtonDetails = (subMenu) =>
+  {
+    switch (subMenu)
+    {
+      case MainMenuCurrentSubMenuEnum.portal:
+        return (
+          [[
+            { name: 'Portal', click: this.mainMenuClick },
+            { name: 'Trade', click: this.mainMenuClick },
+            { name: 'Talk', click: this.mainMenuClick },
+          ]].concat(
+            locationArray.filter(location =>
+              (location !== this.state.currentLocation)).map(location =>
+                ([
+                  { name: location.name, click: this.mainMenuClick },
+                  { name: null, click: null },
+                  { name: 'Fly', click: this.mainMenuClick }
+                ])
+              )
+          )
+        )
+
+      default:
+        break
+    }
+    return [[1], [2], [3], [4]]
   }
 
   mainMenuClick = () =>
   {
-    this.setState((prevState) => ({
-      currentMainMenuOpen: !prevState.currentMainMenuOpen
-    }))
+    if (this.state.currentMainMenuOpen)
+    {
+      this.setState(() => ({
+        currentMainMenuOpen: false,
+        currentMenuDisplayArray: [[
+          { name: 'Portal', click: this.mainMenuClick },
+          { name: 'Trade', click: this.mainMenuClick },
+          { name: 'Talk', click: this.mainMenuClick },
+        ]]
+      }))
+    }
+    else
+    {
+      this.setState(() => ({
+        currentMainMenuOpen: true,
+        currentMenuDisplayArray: this.getButtonDetails(this.state.currentSubMenu)
+      }))
+    }
+
   }
 
   componentDidMount()
@@ -59,20 +110,17 @@ class App extends Component
     return (
       <div>
         <Header />
-        <TransitionGroup className='whole-app'>
-          <CSSTransition in={true} appear={true} key={index} timeout={500} classNames='fade'>
-            <Route exact path='/' component={() =>
-              (
-                <Main
-                  currentLocation={this.state.currentLocation}
-                  rickAndMortyCharacter={this.state.rickAndMortyCharacter}
-                  currentCharacter={this.state.currentCharacter}
-                  state={this.state}
-                  mainMenuClick={this.mainMenuClick}
-                />
-              )} />
-          </CSSTransition>
-        </TransitionGroup>
+        <Route exact path='/' component={() =>
+          (
+            <Main
+              currentLocation={this.state.currentLocation}
+              rickAndMortyCharacter={this.state.rickAndMortyCharacter}
+              currentCharacter={this.state.currentCharacter}
+              state={this.state}
+              mainMenuClick={this.mainMenuClick}
+            />
+          )} />
+
       </div>
     )
   }

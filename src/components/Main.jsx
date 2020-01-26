@@ -1,4 +1,5 @@
 import React from 'react'
+
 import MainMenu from './menu/MainMenu'
 import MainRender from './render/MainRender'
 
@@ -10,12 +11,10 @@ const Main = (props) =>
             rickAndMortyCharacter={props.rickAndMortyCharacter}
             currentCharacter={props.currentCharacter}
         />
-
-            <MainMenu
-                state={props.state}
-                mainMenuClick={props.mainMenuClick}
-            />
-        
+        <MainMenu
+            state={props.state}
+            mainMenuClick={props.mainMenuClick}
+        />
     </div>
     )
 }

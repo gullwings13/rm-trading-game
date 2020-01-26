@@ -3,40 +3,32 @@ import React from 'react'
 const MainMenuButton = (props) =>
 {
 
-    const buttonName = () =>
+
+    const button = (buttonObject, className) =>
     {
-        if (props.type === 'root')
+        if (buttonObject.name == null)
         {
-            return props.display
+            return
         }
-        else if (props.type === 'sub')
+        else
         {
-            return props.display
+            return (
+                <button
+                    onClick={buttonObject.click}
+                    className={className}
+                >{buttonObject.name}
+                </button>
+            )
         }
     }
 
-    const buttonAction = () =>
-    {
-        if (props.type === 'root')
-        {
-            return props.mainMenuClick
-        }
-        else if (props.type === 'sub')
-        {
-            return null
-        }
-    }
-
-    const subButtonAction = (position) =>
-    {
-        return null
-    }
-
-    return (<div className='main-menu-button-container'>
-        <button onClick={subButtonAction('left')} className='main-menu-sub-button'>{buttonName()}</button>
-        <button onClick={buttonAction()} className='main-menu-button'>{buttonName()}</button>
-        <button onClick={subButtonAction('right')} className='main-menu-sub-button'>{buttonName()}</button>
-    </div>)
+    return (
+        <div className={`main-menu-button-container ${props.hideClassName}`}>
+            {button(props.buttonArray[1], 'main-menu-side-button')}
+            {button(props.buttonArray[0], 'main-menu-button')}
+            {button(props.buttonArray[2], 'main-menu-side-button')}
+        </div>
+    )
 }
 
 
