@@ -1,5 +1,12 @@
 *{
     font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
 }
 
 .header-cash-ui{
@@ -7,7 +14,7 @@
 }
 
 .cash-text-flurbo-sign{
-    /* font-family: 'M PLUS Rounded 1c', sans-serif; */
+    font-family: 'M PLUS Rounded 1c', sans-serif;
     font-family: sans-serif;
     font-weight: 900;
 }
@@ -23,15 +30,14 @@ h1,h2,h3,h4,h5{
 .header-container{
     height: 100px;
     width: 100vw;
-    position: absolute;
+    position: fixed;
     background-color: rgba(0,0,0,0.5);
     color: white;
     z-index: 100;
 }
 
 .background-image-container{
-    position: absolute;
-    height: 100vh;
+    position: fixed;
     left: 50%;
 }
 
@@ -42,37 +48,39 @@ h1,h2,h3,h4,h5{
 }
 
 .character-container{
-    position: absolute;
+    position: fixed;
     height: 100vh;
     width: 100vw;
     z-index: 90;
+    overflow: hidden;
 }
 
 .character-left{
-    position: relative;
+    position: fixed;
     left: 0;
     top: 50vh;
-    height: 50vh;
-    width: 50vw;
     left: -60px;
+    overflow-x: hidden;
+    
 }
 
 .character-right{
-    position: relative;
+    position: fixed;
     left: 50vw;
     top: 50vh;
-    height: 50vh;
-    width: 50vw;
+    overflow-x: hidden;
 }
 
 .character-image-container{
-    position: relative;  
+    position: fixed;  
     height: 50vh;
     width: 100vw;
+    overflow-x: hidden;
       
 }
 
 .character-image{
     /* position: relative;   */
     width: 100%;  
+    overflow-x: hidden;
 }
