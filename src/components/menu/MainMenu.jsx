@@ -1,12 +1,12 @@
 import React from 'react'
 import MainMenuButton from './MainMenuButton'
-import { MainMenuCurrentSubMenuEnum, MainMenuStatusEnum } from '../../services/enums'
+// import { MainMenuCurrentSubMenuEnum, MainMenuStatusEnum } from '../../services/enums'
 
 const MainMenu = (props) =>
 {
     const renderMenu = () =>
     {
-        if (props.state.currentMainMenuOpen == true)
+        if (props.state.currentMainMenuOpen === true)
         {
             return (<div className='main-menu-container'>
                 <MainMenuButton
@@ -15,7 +15,7 @@ const MainMenu = (props) =>
                     mainMenuClick={props.mainMenuClick}
                 />
                 {
-                    props.state.currentMenuDisplayArray.map((subButtonDisplay) =>
+                    props.state.currentMenuDisplayArray.map((subButtonDisplay, index) =>
                         (
                             <MainMenuButton type='sub' display={subButtonDisplay} />
                         ))
@@ -23,7 +23,7 @@ const MainMenu = (props) =>
 
             </div>)
         }
-        else if (props.state.currentMainMenuOpen == false)
+        else if (props.state.currentMainMenuOpen === false)
         {
             return (<div className='main-menu-container'>
                 <MainMenuButton
@@ -34,7 +34,11 @@ const MainMenu = (props) =>
         }
     }
 
-    return (renderMenu())
+    return (
+
+        renderMenu()
+
+    )
 }
 
 export default MainMenu

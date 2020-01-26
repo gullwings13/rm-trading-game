@@ -10,10 +10,12 @@ const Main = (props) =>
             rickAndMortyCharacter={props.rickAndMortyCharacter}
             currentCharacter={props.currentCharacter}
         />
-        <MainMenu
-            state={props.state}
-            mainMenuClick={props.mainMenuClick}
-        />
+
+            <MainMenu
+                state={props.state}
+                mainMenuClick={props.mainMenuClick}
+            />
+        
     </div>
     )
 }

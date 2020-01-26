@@ -1,14 +1,18 @@
 import React, { Component } from 'react'
+import 'normalize.css'
 import './App.css'
 import { Route } from 'react-router-dom'
 
 import Header from './components/header/Header'
 import Main from './components/Main'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+
+
 
 import { queryAPI } from './services/api-services'
 import { locationArray } from './services/locations'
 import { characterArray, rickAndMortyCharacter } from './services/characters'
-import { MainMenuCurrentSubMenuEnum, MainMenuStatusEnum } from './services/enums'
+import { MainMenuCurrentSubMenuEnum } from './services/enums'
 
 
 
@@ -55,17 +59,20 @@ class App extends Component
     return (
       <div>
         <Header />
-        <Route exact path='/' component={() =>
-          (
-            <Main
-              currentLocation={this.state.currentLocation}
-              rickAndMortyCharacter={this.state.rickAndMortyCharacter}
-              currentCharacter={this.state.currentCharacter}
-              state={this.state}
-              mainMenuClick={this.mainMenuClick}
-            />
-
-          )} />
+        <TransitionGroup className='whole-app'>
+          <CSSTransition in={true} appear={true} key={index} timeout={500} classNames='fade'>
+            <Route exact path='/' component={() =>
+              (
+                <Main
+                  currentLocation={this.state.currentLocation}
+                  rickAndMortyCharacter={this.state.rickAndMortyCharacter}
+                  currentCharacter={this.state.currentCharacter}
+                  state={this.state}
+                  mainMenuClick={this.mainMenuClick}
+                />
+              )} />
+          </CSSTransition>
+        </TransitionGroup>
       </div>
     )
   }
