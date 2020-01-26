@@ -1,41 +1,56 @@
 import React, { Component } from 'react'
 import './App.css'
-import Header from './components/Header'
-import Main from './components/Main'
-import { queryAPI } from './services/api-services'
 import { Route } from 'react-router-dom'
+
+import Header from './components/header/Header'
+import Main from './components/Main'
+
+import { queryAPI } from './services/api-services'
+import { locationArray } from './services/locations'
+import { characterArray, rickAndMortyCharacter } from './services/characters'
 
 class App extends Component
 {
   constructor(props)
   {
     super(props)
+
     this.state = {
-      locations: []
+      currentLocation: locationArray[1],
+      currentLocationDetails: [],
+      rickAndMortyCharacter: rickAndMortyCharacter,
+      currentCharacter: characterArray[0]
     }
   }
 
   componentDidMount()
   {
-    this.locationQuery()
+    this.locationQuery(this.state.currentLocation.api_id)
   }
 
-  locationQuery = async () =>
+  locationQuery = async (api_id) =>
   {
-    let queryResult = await queryAPI('https://rickandmortyapi.com/api/location/1,2,3,4,5')
-    this.setState({
-      locations: queryResult
-    })
-    console.log(queryResult)
-  }
+    let queryResult = await queryAPI(`https://rickandmortyapi.com/api/location/${api_id}`)
 
+    this.setState((prevState) => ({
+      currentLocationDetails: queryResult
+    }))
+  }
 
   render()
   {
     return (
       <div>
         <Header />
-        <Route exact path='/' component={() => (<Main />)} />
+        <Route exact path='/' component={() =>
+          (
+            <Main
+              currentLocation={this.state.currentLocation}
+              rickAndMortyCharacter={this.state.rickAndMortyCharacter}
+              currentCharacter={this.state.currentCharacter}
+            />
+
+          )} />
       </div>
     )
   }
