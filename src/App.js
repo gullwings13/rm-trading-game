@@ -24,7 +24,8 @@ class App extends Component
       rickAndMortyCharacter: rickAndMortyCharacter,
       currentCharacter: characterArray[0],
       currentSubMenu: MainMenuCurrentSubMenuEnum.portal,
-      currentMainMenuOpen: false
+      currentMainMenuOpen: false,
+      currentMenuDisplayArray: [1, 2, 3]
     }
   }
 

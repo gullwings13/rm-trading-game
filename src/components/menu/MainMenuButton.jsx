@@ -11,7 +11,7 @@ const MainMenuButton = (props) =>
         }
         else if (props.type == 'sub')
         {
-            return 'sub'
+            return props.display
         }
     }
 

@@ -14,10 +14,13 @@ const MainMenu = (props) =>
                     display='Close'
                     mainMenuClick={props.mainMenuClick}
                 />
-                <MainMenuButton type='sub' />
-                <MainMenuButton type='sub' />
-                <MainMenuButton type='sub' />
-                <MainMenuButton type='sub' />
+                {
+                    props.state.currentMenuDisplayArray.map((subButtonDisplay) =>
+                        (
+                            <MainMenuButton type='sub' display={subButtonDisplay} />
+                        ))
+                }
+
             </div>)
         }
         else if (props.state.currentMainMenuOpen == false)
