@@ -8,6 +8,9 @@ import Main from './components/Main'
 import { queryAPI } from './services/api-services'
 import { locationArray } from './services/locations'
 import { characterArray, rickAndMortyCharacter } from './services/characters'
+import { MainMenuCurrentSubMenuEnum, MainMenuStatusEnum } from './services/enums'
+
+
 
 class App extends Component
 {
@@ -19,8 +22,17 @@ class App extends Component
       currentLocation: locationArray[1],
       currentLocationDetails: [],
       rickAndMortyCharacter: rickAndMortyCharacter,
-      currentCharacter: characterArray[0]
+      currentCharacter: characterArray[0],
+      currentSubMenu: MainMenuCurrentSubMenuEnum.portal,
+      currentMainMenuOpen: false
     }
+  }
+
+  mainMenuClick = () =>
+  {
+    this.setState((prevState) => ({
+      currentMainMenuOpen: !prevState.currentMainMenuOpen
+    }))
   }
 
   componentDidMount()
@@ -48,6 +60,8 @@ class App extends Component
               currentLocation={this.state.currentLocation}
               rickAndMortyCharacter={this.state.rickAndMortyCharacter}
               currentCharacter={this.state.currentCharacter}
+              state={this.state}
+              mainMenuClick={this.mainMenuClick}
             />
 
           )} />
