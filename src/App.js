@@ -96,9 +96,17 @@ class App extends Component
   clickSell = (id) =>
   {
     let amount = 1
+    let cost = this.state.currentItems[id].basePrice
+    let totalCost = cost * amount
     if (this.canSell(amount, id))
     {
-
+      let tempArray = this.state.currentItems
+      tempArray[id].owned -= 1
+      this.setState((prevState) =>
+        ({
+          currentItems: tempArray,
+          currentMoneyBalance: prevState.currentMoneyBalance + totalCost
+        }))
     }
     else
     {

@@ -48,7 +48,7 @@ const MainMenuButton = (props) =>
             return (
                 <button
                     onClick={buttonObject.click}
-                    className={(buttonObject.name == '>' || buttonObject.name == '<') ? className : className + ' sub'}
+                    className={(buttonObject.name === '>' || buttonObject.name === '<') ? className : className + ' sub'}
                 ><span>{buttonObject.name}</span>
                 </button>
             )
