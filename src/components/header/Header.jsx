@@ -5,7 +5,7 @@ const Header = (props) =>
 {
     return (
         <div className='header-container'>
-            <CashUI currentCash={100}/>
+            <CashUI currentMoneyBalance={props.currentMoneyBalance}/>
         </div>
     )
 }

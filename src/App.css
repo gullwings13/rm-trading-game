@@ -101,26 +101,90 @@ h1,h2,h3,h4,h5{
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 0 10px 0;
+    padding: 0 0 5px 0;
+    height: 90px;
     width: 240px;
-    height: 80px;
 }
 
 .main-menu-button, .main-menu-side-button{
     border: 1px solid black;
     border-radius: 3px;
+    margin: 2px;
 }
 
 .main-menu-button{
-    height: 80px;
-    width: 120px;
+    height: 90px;
+    width: 140px;
     font-size: 20px;
 }
 
 .main-menu-side-button{
-    height: 50px;
-    width: 60px;
-    transform: rotate(90deg);
+    height: 90px;
+    width: 45px;
+    /* transform: rotate(90deg); */
+}
+
+.main-menu-side-button.sub span{
+    display: block;
+    transform: rotate(80deg);
+}
+
+.trade-button-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.trade-button-column-one{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 60%;
+    height: 100%;
+    background-color: cadetblue;
+    text-align: left;
+}
+
+.trade-button-column-two{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    height: 100%;
+    background-color: chartreuse;
+    text-align: left;
+}
+
+.trade-button-ticker{
+    font-size: 25px;
+    margin: 2px;
+}
+
+.trade-button-name{
+    font-size: 10px;
+    margin: 2px;
+}
+
+.trade-button-price{
+    text-align: right;
+    font-size: 18px;
+    margin: 2px;
+}
+
+.trade-button-detail-container{
+    display: flex;
+}
+
+.trade-button-detail-label{
+    font-size: 9px;
+    text-align: left;
+    background-color: cornflowerblue;
+    width: 100%;
+    margin: 2px;
+}
+.trade-button-detail{
+    font-size: 9px;
+    text-align: right;
+    margin: 2px;
 }
 
 /* .fade-appear{

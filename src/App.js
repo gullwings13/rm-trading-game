@@ -6,14 +6,16 @@ import { Route } from 'react-router-dom'
 import Header from './components/header/Header'
 import Main from './components/Main'
 
-
-
 import { queryAPI } from './services/api-services'
 import { locationArray } from './services/locations'
+import { itemArray } from './services/items'
 import { characterArray, rickAndMortyCharacter } from './services/characters'
-import { MainMenuCurrentSubMenuEnum } from './services/enums'
+import { MainMenuSubMenuEnum, MainMenuSubMenuByID, MainMenuLength } from './services/enums'
 
-
+// leave april 10  - first day of leave april 13
+// weeks off 13 and 20
+// come back on april 23rd or 22
+// come april 27
 
 class App extends Component
 {
@@ -26,74 +28,188 @@ class App extends Component
       currentLocationDetails: [],
       rickAndMortyCharacter: rickAndMortyCharacter,
       currentCharacter: characterArray[0],
-      prevSubMenu: MainMenuCurrentSubMenuEnum.portal,
-      currentSubMenu: MainMenuCurrentSubMenuEnum.portal,
-      nextSubMenu: MainMenuCurrentSubMenuEnum.portal,
+      currentSubMenu: MainMenuSubMenuEnum.trade,
       currentMainMenuOpen: false,
-      currentMenuDisplayArray: [[
-        { name: 'Portal', click: this.mainMenuClick },
-        { name: 'Trade', click: this.mainMenuClick },
-        { name: 'Talk', click: this.mainMenuClick },
-      ]]
+      currentMenuDisplayArray: [],
+      currentItems: itemArray,
+      currentMoneyBalance: 100
     }
   }
 
-
-
-  getButtonDetails = (subMenu) =>
+  changeSubMenu = (subMenu, direction) =>
   {
-    switch (subMenu)
+    let currentSubMenuID = subMenu.id
+    let newSubMenuID = currentSubMenuID + direction
+    if (newSubMenuID >= MainMenuLength)
     {
-      case MainMenuCurrentSubMenuEnum.portal:
-        return (
-          [[
-            { name: 'Portal', click: this.mainMenuClick },
-            { name: 'Trade', click: this.mainMenuClick },
-            { name: 'Talk', click: this.mainMenuClick },
-          ]].concat(
-            locationArray.filter(location =>
-              (location !== this.state.currentLocation)).map(location =>
+      newSubMenuID = 0
+    }
+    else if (newSubMenuID < 0)
+    {
+      newSubMenuID = MainMenuLength - 1
+    }
+    return MainMenuSubMenuByID(newSubMenuID)
+  }
+
+  prevSubMenu = (direction) =>
+  {
+    let newSubMenu = this.changeSubMenu(this.state.currentSubMenu, direction)
+    let newArray = this.buildMenuDisplayArray(newSubMenu, this.state.currentMainMenuOpen)
+    this.setState((prevState) =>
+      ({
+        currentSubMenu: newSubMenu,
+        currentMenuDisplayArray: newArray
+      }))
+  }
+
+
+  clickPortal = (id) =>
+  {
+    this.setState((prevState) =>
+      ({
+        currentLocation: locationArray[id]
+      }))
+    this.locationQuery(locationArray[id].api_id)
+    this.toggleMainMenu()
+  }
+
+  clickBuy = (id) =>
+  {
+    let amount = 1
+    let cost = this.state.currentItems[id].basePrice
+    let totalCost = cost * amount
+    if (this.canAfford(totalCost))
+    {
+      let tempArray = this.state.currentItems
+      tempArray[id].owned += 1
+      this.setState((prevState) =>
+        ({
+          currentItems: tempArray,
+          currentMoneyBalance: prevState.currentMoneyBalance - totalCost
+        }))
+    }
+    else
+    {
+    }
+  }
+
+  clickSell = (id) =>
+  {
+    let amount = 1
+    if (this.canSell(amount, id))
+    {
+
+    }
+    else
+    {
+
+    }
+  }
+
+  canAfford = (amount) =>
+  {
+    return amount <= this.state.currentMoneyBalance
+  }
+
+  canSell = (amount, id) =>
+  {
+    return amount <= this.state.currentItems[id].owned
+  }
+
+  buildMenuDisplayArray = (newSubMenu, menuOpen) =>
+  {
+    // let prevSubMenu = this.changeSubMenu(newSubMenu, -1)
+    // let nextSubMenu = this.changeSubMenu(newSubMenu, 1)
+
+    let newArray = [
+      [
+        { name: menuOpen ? 'Close' : newSubMenu.name, click: this.toggleMainMenu },
+        // { name: prevSubMenu.name, click: () => { this.prevSubMenu(-1) } },
+        // { name: nextSubMenu.name, click: () => { this.prevSubMenu(1) } },
+        { name: '<', click: () => { this.prevSubMenu(-1) } },
+        { name: '>', click: () => { this.prevSubMenu(1) } },
+      ]
+    ]
+
+    if (menuOpen)
+    {
+      switch (newSubMenu)
+      {
+        case MainMenuSubMenuEnum.portal:
+          return (
+            newArray.concat(
+              locationArray.filter(location =>
+                (location !== this.state.currentLocation)).map(location =>
+                  ([
+                    { name: location.name, click: this.toggleMainMenu },
+                    { name: null, click: null },
+                    { name: 'Portal', click: () => { this.clickPortal(location.id) } }
+                  ])
+                )
+            )
+          )
+
+        case MainMenuSubMenuEnum.trade:
+          return (
+            newArray.concat(
+              this.state.currentItems.map(item =>
                 ([
-                  { name: location.name, click: this.mainMenuClick },
-                  { name: null, click: null },
-                  { name: 'Fly', click: this.mainMenuClick }
+                  { trade: item, click: null },
+                  { name: 'Sell', click: () => { this.clickSell(item.id) } },
+                  { name: 'Buy', click: () => { this.clickBuy(item.id) } }
                 ])
               )
+            )
           )
-        )
 
-      default:
-        break
+        case MainMenuSubMenuEnum.talk:
+          return (
+            newArray.concat(
+              locationArray.filter(location =>
+                (location !== this.state.currentLocation)).map(location =>
+                  ([
+                    { name: location.name, click: this.toggleMainMenu },
+                    { name: null, click: null },
+                    { name: 'Talk', click: this.toggleMainMenu }
+                  ])
+                )
+            )
+          )
+        default:
+      }
     }
-    return [[1], [2], [3], [4]]
+    else
+    {
+      return newArray
+    }
   }
 
-  mainMenuClick = () =>
+  toggleMainMenu = () =>
   {
     if (this.state.currentMainMenuOpen)
     {
-      this.setState(() => ({
+      this.setState((prevState) => ({
         currentMainMenuOpen: false,
-        currentMenuDisplayArray: [[
-          { name: 'Portal', click: this.mainMenuClick },
-          { name: 'Trade', click: this.mainMenuClick },
-          { name: 'Talk', click: this.mainMenuClick },
-        ]]
+        currentMenuDisplayArray: this.buildMenuDisplayArray(prevState.currentSubMenu, false)
       }))
     }
     else
     {
-      this.setState(() => ({
+      this.setState((prevState) => ({
         currentMainMenuOpen: true,
-        currentMenuDisplayArray: this.getButtonDetails(this.state.currentSubMenu)
+        currentMenuDisplayArray: this.buildMenuDisplayArray(prevState.currentSubMenu, true)
       }))
     }
-
   }
 
   componentDidMount()
   {
-    this.locationQuery(this.state.currentLocation.api_id)
+    // this.locationQuery(this.state.currentLocation.api_id)
+    this.toggleMainMenu()
+    // setInterval(() =>
+    // {
+    //   console.log(this.state.currentSubMenu.name)
+    // }, 1000)
   }
 
   locationQuery = async (api_id) =>
@@ -101,7 +217,7 @@ class App extends Component
     let queryResult = await queryAPI(`https://rickandmortyapi.com/api/location/${api_id}`)
 
     this.setState((prevState) => ({
-      currentLocationDetails: queryResult
+      currentLocationDetails: queryResult,
     }))
   }
 
@@ -109,7 +225,7 @@ class App extends Component
   {
     return (
       <div>
-        <Header />
+        <Header currentMoneyBalance={this.state.currentMoneyBalance} />
         <Route exact path='/' component={() =>
           (
             <Main
@@ -117,7 +233,7 @@ class App extends Component
               rickAndMortyCharacter={this.state.rickAndMortyCharacter}
               currentCharacter={this.state.currentCharacter}
               state={this.state}
-              mainMenuClick={this.mainMenuClick}
+              mainMenuClick={this.toggleMainMenu}
             />
           )} />
 
