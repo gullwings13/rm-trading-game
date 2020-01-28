@@ -9,7 +9,7 @@ const Characters = (props) =>
                 <CharacterImage character={props.rickAndMortyCharacter} />
             </div>
             <div className='character-right'>
-                <CharacterImage character={props.currentCharacter} />
+                <CharacterImage character={props.currentCharacter} characterImageType={2} />
             </div>
         </div>
     )

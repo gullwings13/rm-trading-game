@@ -79,10 +79,27 @@ h1,h2,h3,h4,h5{
     /* overflow-x: hidden; */
 }
 
+.character-image-container-type-two{
+    position: fixed;  
+    height: 50vh;
+    width: 50vw;
+    
+    /* overflow-x: hidden; */
+}
+
 .character-image{
     /* position: relative;   */
     width: 100%;  
     max-width: 400px;
+    /* border: 10px solid black; */
+    /* overflow-x: hidden; */
+}
+
+.character-image-type-two{
+    /* position: relative;   */
+    width: 100%;  
+    max-width: 400px;
+    border: 10px solid black;
     /* overflow-x: hidden; */
 }
 
@@ -102,7 +119,7 @@ h1,h2,h3,h4,h5{
     align-items: center;
     justify-content: flex-end;
     padding: 0 0 5px 0;
-    height: 90px;
+    height: 70px;
     width: 240px;
 }
 
@@ -113,13 +130,13 @@ h1,h2,h3,h4,h5{
 }
 
 .main-menu-button{
-    height: 90px;
+    height: 70px;
     width: 140px;
     font-size: 20px;
 }
 
 .main-menu-side-button{
-    height: 90px;
+    height: 70px;
     width: 45px;
     /* transform: rotate(90deg); */
 }

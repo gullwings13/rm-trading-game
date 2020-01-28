@@ -26,10 +26,11 @@ class App extends Component
     this.state = {
       currentLocation: locationArray[1],
       currentLocationDetails: [],
+      currentLocationCharacters: [],
       rickAndMortyCharacter: rickAndMortyCharacter,
       currentCharacter: characterArray[0],
       currentSubMenu: MainMenuSubMenuEnum.trade,
-      currentMainMenuOpen: false,
+      currentMainMenuOpen: true,
       currentMenuDisplayArray: [],
       currentItems: itemArray,
       currentMoneyBalance: 100
@@ -62,7 +63,6 @@ class App extends Component
       }))
   }
 
-
   clickPortal = (id) =>
   {
     this.setState((prevState) =>
@@ -71,6 +71,7 @@ class App extends Component
       }))
     this.locationQuery(locationArray[id].api_id)
     this.toggleMainMenu()
+    console.log(this.state.currentLocationDetails)
   }
 
   clickBuy = (id) =>
@@ -126,14 +127,9 @@ class App extends Component
 
   buildMenuDisplayArray = (newSubMenu, menuOpen) =>
   {
-    // let prevSubMenu = this.changeSubMenu(newSubMenu, -1)
-    // let nextSubMenu = this.changeSubMenu(newSubMenu, 1)
-
     let newArray = [
       [
         { name: menuOpen ? 'Close' : newSubMenu.name, click: this.toggleMainMenu },
-        // { name: prevSubMenu.name, click: () => { this.prevSubMenu(-1) } },
-        // { name: nextSubMenu.name, click: () => { this.prevSubMenu(1) } },
         { name: '<', click: () => { this.prevSubMenu(-1) } },
         { name: '>', click: () => { this.prevSubMenu(1) } },
       ]
@@ -212,8 +208,8 @@ class App extends Component
 
   componentDidMount()
   {
-    // this.locationQuery(this.state.currentLocation.api_id)
     this.toggleMainMenu()
+    this.locationQuery(this.state.currentLocation.api_id)
     // setInterval(() =>
     // {
     //   console.log(this.state.currentSubMenu.name)
@@ -222,11 +218,54 @@ class App extends Component
 
   locationQuery = async (api_id) =>
   {
-    let queryResult = await queryAPI(`https://rickandmortyapi.com/api/location/${api_id}`)
+    try
+    {
+      let queryResult = await queryAPI(`https://rickandmortyapi.com/api/location/${api_id}`)
+      this.setState((prevState) => ({
+        currentLocationDetails: queryResult,
+      }))
+      this.parseLocationCharacters(queryResult)
+    }
+    catch (error)
+    {
+      console.log(error)
+    }
+  }
 
-    this.setState((prevState) => ({
-      currentLocationDetails: queryResult,
-    }))
+  parseLocationCharacters = async (queryResult) =>
+  {
+    try
+    {
+      let tempArray = queryResult.residents.map((resident) => (parseInt(resident.split("character/")[1])))
+      await this.characterQuery(tempArray)
+    }
+    catch (error)
+    {
+      console.log(error)
+    }
+  }
+
+
+  characterQuery = async (arrayOfCharIDs) =>
+  {
+    try
+    {
+      let charString = arrayOfCharIDs.join(',')
+      let queryString = `https://rickandmortyapi.com/api/character/${charString}`
+      let queryResult = await queryAPI(queryString)
+      let randomID = Math.floor(Math.random() * queryResult.length)
+      console.log(queryResult)
+      console.log(queryResult[randomID])
+      this.setState({
+        currentLocationCharacters: queryResult,
+        currentCharacter: queryResult[randomID]
+      })
+      console.log(queryResult)
+    }
+    catch (error)
+    {
+      console.log(error)
+    }
   }
 
   render()
