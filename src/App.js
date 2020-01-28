@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import 'normalize.css'
 import './App.css'
 import { Route } from 'react-router-dom'
+import { withRouter } from 'react-router'
 
 import Header from './components/header/Header'
 import Main from './components/Main'
@@ -10,7 +11,10 @@ import { queryAPI } from './services/api-services'
 import { locationArray } from './services/locations'
 import { itemArray } from './services/items'
 import { characterArray, rickAndMortyCharacter } from './services/characters'
+import { onboardingDialogArray } from './services/onboarding-dialog'
 import { MainMenuSubMenuEnum, MainMenuSubMenuByID, MainMenuLength } from './services/enums'
+import Portal from './components/routed/Portal'
+import Onboarding from './components/routed/Onboarding'
 
 // leave april 10  - first day of leave april 13
 // weeks off 13 and 20
@@ -33,8 +37,28 @@ class App extends Component
       currentMainMenuOpen: true,
       currentMenuDisplayArray: [],
       currentItems: itemArray,
-      currentMoneyBalance: 100
+      currentMoneyBalance: 100,
+      onboardingComplete: false
     }
+  }
+
+  componentDidMount()
+  {
+    this.toggleMainMenu()
+    this.locationQuery(this.state.currentLocation.api_id)
+    if (this.state.onboardingComplete == false)
+    {
+      this.props.history.push('/hello')
+    }
+  }
+
+  onboardingCompleted = () =>
+  {
+    console.log('onboard complete button')
+    this.setState({
+      onboardingComplete: true
+    })
+    this.props.history.push('/portal')
   }
 
   changeSubMenu = (subMenu, direction) =>
@@ -65,13 +89,15 @@ class App extends Component
 
   clickPortal = (id) =>
   {
+    // console.log(this.props)
+    this.props.history.push('/portal')
     this.setState((prevState) =>
       ({
         currentLocation: locationArray[id]
       }))
     this.locationQuery(locationArray[id].api_id)
     this.toggleMainMenu()
-    console.log(this.state.currentLocationDetails)
+
   }
 
   clickBuy = (id) =>
@@ -125,6 +151,28 @@ class App extends Component
     return amount <= this.state.currentItems[id].owned
   }
 
+  clickTalk = (api_id) =>
+  {
+    console.log('talk to ' + api_id)
+
+    let id = this.convertCharacterAPIIDtoArrayID(api_id)
+    this.setState((prevState) =>
+      ({
+        currentCharacter: prevState.currentLocationCharacters[id],
+      }))
+    this.toggleMainMenu()
+  }
+
+  convertCharacterAPIIDtoArrayID = (api_id) =>
+  {
+    for (let index = 0; index < this.state.currentLocationCharacters.length; index++)
+    {
+      if (api_id === this.state.currentLocationCharacters[index].id)
+        return index
+    }
+    return -1
+  }
+
   buildMenuDisplayArray = (newSubMenu, menuOpen) =>
   {
     let newArray = [
@@ -145,7 +193,7 @@ class App extends Component
               locationArray.filter(location =>
                 (location !== this.state.currentLocation)).map(location =>
                   ([
-                    { name: location.name, click: this.toggleMainMenu },
+                    { name: location.name, click: null },
                     { name: null, click: null },
                     { name: 'Portal', click: () => { this.clickPortal(location.id) } }
                   ])
@@ -169,12 +217,12 @@ class App extends Component
         case MainMenuSubMenuEnum.talk:
           return (
             newArray.concat(
-              locationArray.filter(location =>
-                (location !== this.state.currentLocation)).map(location =>
+              this.state.currentLocationCharacters.filter(character =>
+                (character !== this.state.currentCharacter)).map(character =>
                   ([
-                    { name: location.name, click: this.toggleMainMenu },
+                    { name: character.name, click: null },
                     { name: null, click: null },
-                    { name: 'Talk', click: this.toggleMainMenu }
+                    { name: 'Talk', click: () => { this.clickTalk(character.id) } }
                   ])
                 )
             )
@@ -206,15 +254,7 @@ class App extends Component
     }
   }
 
-  componentDidMount()
-  {
-    this.toggleMainMenu()
-    this.locationQuery(this.state.currentLocation.api_id)
-    // setInterval(() =>
-    // {
-    //   console.log(this.state.currentSubMenu.name)
-    // }, 1000)
-  }
+
 
   locationQuery = async (api_id) =>
   {
@@ -245,22 +285,32 @@ class App extends Component
     }
   }
 
-
   characterQuery = async (arrayOfCharIDs) =>
   {
     try
     {
       let charString = arrayOfCharIDs.join(',')
       let queryString = `https://rickandmortyapi.com/api/character/${charString}`
-      let queryResult = await queryAPI(queryString)
-      let randomID = Math.floor(Math.random() * queryResult.length)
-      console.log(queryResult)
-      console.log(queryResult[randomID])
-      this.setState({
-        currentLocationCharacters: queryResult,
-        currentCharacter: queryResult[randomID]
-      })
-      console.log(queryResult)
+      let characterQueryResult = await queryAPI(queryString)
+
+      // console.log('is array ' + Array.isArray(queryResult))
+      // console.log(queryResult)
+      if (Array.isArray(characterQueryResult))
+      {
+        let aliveCharacters = characterQueryResult.filter((character) => (character.status.toLowerCase() !== "dead"))
+        let randomID = Math.floor(Math.random() * aliveCharacters.length)
+        this.setState({
+          currentLocationCharacters: aliveCharacters,
+          currentCharacter: aliveCharacters[randomID]
+        })
+      }
+      else
+      {
+        this.setState({
+          currentLocationCharacters: [characterQueryResult],
+          currentCharacter: characterQueryResult
+        })
+      }
     }
     catch (error)
     {
@@ -283,10 +333,11 @@ class App extends Component
               mainMenuClick={this.toggleMainMenu}
             />
           )} />
-
+        <Route exact path='/portal'><Portal {...this.props} /></Route>
+        <Route exact path='/hello'><Onboarding {...this.props} onboardingCompleted={this.onboardingCompleted} /></Route>
       </div>
     )
   }
 }
 
-export default App
+export default withRouter(App)

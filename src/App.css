@@ -1,5 +1,4 @@
 *{
-    /* font-family: 'Open Sans', sans-serif; */
     font-family: 'Lilita One', cursive;
     margin: 0;
     padding: 0;
@@ -54,53 +53,45 @@ h1,h2,h3,h4,h5{
     height: 100vh;
     width: 100vw;
     z-index: 90;
-    /* overflow: hidden; */
 }
 
 .character-left{
     position: fixed;
-    /* left: 0; */
-    top: 50vh;
+    bottom: 40vh;
     left: -60px;
-    /* overflow-x: hidden; */
 }
 
 .character-right{
     position: fixed;
-    right: 150px;
-    top: 50vh;
-    /* overflow-x: hidden; */
+    display: flex;
+    justify-content: flex-start;
+    right: 35vw;
+    bottom: 40vh;
 }
 
 .character-image-container{
     position: fixed;  
-    height: 50vh;
+    height: 40vh;
     width: 100vw;
-    /* overflow-x: hidden; */
 }
 
 .character-image-container-type-two{
     position: fixed;  
-    height: 50vh;
-    width: 50vw;
-    
-    /* overflow-x: hidden; */
+    height: 40vh;
+    width: calc(35vw - 25px);
+    max-width: 300px;
 }
 
 .character-image{
-    /* position: relative;   */
     width: 100%;  
     max-width: 400px;
-    /* border: 10px solid black; */
-    /* overflow-x: hidden; */
 }
 
 .character-image-type-two{
-    /* position: relative;   */
     width: 100%;  
-    max-width: 400px;
+    max-width: 300px;
+    margin: 0 10px 0 0;
     border: 10px solid black;
-    /* overflow-x: hidden; */
 }
 
 .main-menu-container{
@@ -111,6 +102,7 @@ h1,h2,h3,h4,h5{
     width: 100vw;
     height: 100vh;
     z-index: 200;
+    overflow: scroll;
 }
 
 .main-menu-button-container
@@ -138,7 +130,6 @@ h1,h2,h3,h4,h5{
 .main-menu-side-button{
     height: 70px;
     width: 45px;
-    /* transform: rotate(90deg); */
 }
 
 .main-menu-side-button.sub span{
@@ -203,6 +194,97 @@ h1,h2,h3,h4,h5{
     text-align: right;
     margin: 2px;
 }
+
+.portal-image-container-container{
+    display: flex;
+    justify-content: center;
+}
+
+.portal-image-container{
+    position: fixed;
+    animation: portal-grow-shrink 5s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+.portal-image{
+    position: relative;
+    height: 100vh;
+    animation: portal-twirl 5s linear infinite;
+    transform-origin: center center;
+}
+
+.onboarding-container
+{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+}
+
+.onboarding-char-container{
+    width: 100vw;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.onboarding-char-image{
+    max-width: 200px;
+    margin: 10px;
+}
+
+.onboarding-rick-container{
+
+}
+
+.onboarding-morty-container
+{
+    margin: 20px 0 0 0;
+}
+
+.onboarding-button{
+    width: 100px;
+    height: 50px;
+    font-size: 30px;
+}
+
+@media only screen 
+    and (orientation: landscape)
+  {
+    body{
+        background-color:red;
+        
+    }
+    .cash-text{
+        color: greenyellow;
+    }
+  }
+
+  @keyframes portal-twirl
+  {
+      0%{
+        transform: rotate(0deg);
+      }
+      50%{
+        transform: rotate(180deg);
+      }
+      100%{
+        transform: rotate(360deg);
+      }
+  }
+
+  @keyframes portal-grow-shrink
+  {
+      0%{
+        transform: scale(0.9);
+      }
+      50%{
+        transform: scale(2.1);
+      }
+      100%{
+        transform: scale(0.9);
+      }
+  }
+
 
 /* .fade-appear{
     opacity: 0;

@@ -1,6 +1,7 @@
 import earth from '../images/earth.png'
 import gazorpazorp from '../images/gazorpazorp_paradise.png'
 import blipsAndChitz from '../images/blips_and_chitz.png'
+import earthPhoneDimension from '../images/earth_phone_dimension.jpg'
 
 export const locationArray = [
     {
@@ -20,5 +21,11 @@ export const locationArray = [
         api_id: 67,
         name: 'Blips and Chitz!',
         image: blipsAndChitz
+    },
+    {
+        id: 3,
+        api_id: 72,
+        name: 'Earth (Phone Dimension)',
+        image: earthPhoneDimension
     },
 ]
