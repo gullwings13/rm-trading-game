@@ -16,6 +16,36 @@ import { characterArray, rickAndMortyCharacter } from './services/characters'
 import { MainMenuSubMenuEnum, MainMenuSubMenuByID, MainMenuLength } from './services/enums'
 import Portal from './components/routed/Portal'
 import Onboarding from './components/routed/Onboarding'
+import Gameover from './components/routed/Gameover'
+
+// const defaultMenu = [
+//   [
+//     { name: MainMenuSubMenuEnum.portal, click: this.toggleMainMenu },
+//     { name: '<', click: () => { this.prevSubMenu(-1) } },
+//     { name: '>', click: () => { this.prevSubMenu(1) } },
+//   ]
+// ]
+
+const defaultState = {
+  currentLocation: locationArray[1],
+  currentLocationDetails: [],
+  currentLocationCharacters: [],
+  rickAndMortyCharacter: rickAndMortyCharacter,
+  currentCharacter: characterArray[0],
+  currentSubMenu: MainMenuSubMenuEnum.portal,
+  currentMainMenuOpen: true,
+  currentMenuDisplayArray: [],
+  currentItems: itemArray,
+  currentMoneyBalance: 1000,
+  currentDebtBalance: 5000,
+  debtInterestRate: 1.1,
+  currentDaysPassed: 0,
+  totalDaysTillGameOver: 2,
+  secondToLastDay: false,
+  gameOver: false,
+  onboardingComplete: true, // change to false for game start
+  onboardingDialogID: 0,
+}
 
 // leave april 10  - first day of leave april 13
 // weeks off 13 and 20
@@ -28,30 +58,19 @@ class App extends Component
   {
     super(props)
 
-    this.state = {
-      currentLocation: locationArray[1],
-      currentLocationDetails: [],
-      currentLocationCharacters: [],
-      rickAndMortyCharacter: rickAndMortyCharacter,
-      currentCharacter: characterArray[0],
-      currentSubMenu: MainMenuSubMenuEnum.trade,
-      currentMainMenuOpen: true,
-      currentMenuDisplayArray: [],
-      currentItems: itemArray,
-      currentMoneyBalance: 100,
-      onboardingComplete: false,
-      onboardingDialogID: 0
-    }
+    this.state = defaultState
+    this.buildMenuDisplayArray(defaultState.currentSubMenu, defaultState.currentMainMenuOpen)
   }
 
   componentDidMount()
   {
-    this.toggleMainMenu()
+    // this.buildMenuDisplayArray(defaultState.currentSubMenu, defaultState.currentMainMenuOpen)
     this.locationQuery(this.state.currentLocation.api_id)
     if (this.state.onboardingComplete == false)
     {
       this.props.history.push('/hello')
     }
+    this.toggleMainMenu()
   }
 
   onboardingNextButton = () =>
@@ -95,17 +114,52 @@ class App extends Component
       }))
   }
 
+  advanceDaysPassed = () =>
+  {
+    let newDay = this.state.currentDaysPassed + 1
+    this.setState((prevState) =>
+      ({
+        currentDaysPassed: prevState.currentDaysPassed + 1
+      }))
+
+    if (newDay === this.state.totalDaysTillGameOver)
+    {
+      this.setState((prevState) =>
+        ({
+          secondToLastDay: true
+        }))
+      // this.buildPortalMenuForFinalDay()
+    }
+    else if (newDay === this.state.totalDaysTillGameOver + 1)
+    {
+      this.setState((prevState) =>
+        ({
+          gameOver: true
+        }))
+      // this.buildPortalMenuForFinalDay()
+    }
+  }
+
+  addInterestToDebt = () =>
+  {
+    this.setState((prevState) =>
+      ({
+        currentDebtBalance: Math.floor(prevState.currentDebtBalance * this.state.debtInterestRate)
+      }))
+  }
+
   clickPortal = (id) =>
   {
     // console.log(this.props)
     this.props.history.push('/portal')
+    this.advanceDaysPassed()
+    this.addInterestToDebt()
     this.setState((prevState) =>
       ({
         currentLocation: locationArray[id]
       }))
     this.locationQuery(locationArray[id].api_id)
     this.toggleMainMenu()
-
   }
 
   clickBuy = (id) =>
@@ -171,6 +225,18 @@ class App extends Component
     this.toggleMainMenu()
   }
 
+  gameOver = () =>
+  {
+    this.props.history.push('/gameover')
+  }
+
+  clickResetGame = () =>
+  {
+    this.setState(defaultState)
+    this.locationQuery(defaultState.currentLocation.api_id)
+    this.toggleMainMenu()
+  }
+
   convertCharacterAPIIDtoArrayID = (api_id) =>
   {
     for (let index = 0; index < this.state.currentLocationCharacters.length; index++)
@@ -196,7 +262,19 @@ class App extends Component
       switch (newSubMenu)
       {
         case MainMenuSubMenuEnum.portal:
+
+          if (this.state.secondToLastDay === true)
+          {
+            return (
+
+              newArray.concat([[
+                { name: 'Final Day', click: null },
+                { name: null, click: null },
+                { name: 'Finish', click: this.gameOver }
+              ]]))
+          }
           return (
+
             newArray.concat(
               locationArray.filter(location =>
                 (location !== this.state.currentLocation)).map(location =>
@@ -208,6 +286,7 @@ class App extends Component
                 )
             )
           )
+
 
         case MainMenuSubMenuEnum.trade:
           return (
@@ -261,8 +340,6 @@ class App extends Component
       }))
     }
   }
-
-
 
   locationQuery = async (api_id) =>
   {
@@ -330,16 +407,24 @@ class App extends Component
   {
     return (
       <div>
-        <Header currentMoneyBalance={this.state.currentMoneyBalance} />
         <Route exact path='/' component={() =>
           (
-            <Main
-              currentLocation={this.state.currentLocation}
-              rickAndMortyCharacter={this.state.rickAndMortyCharacter}
-              currentCharacter={this.state.currentCharacter}
-              state={this.state}
-              mainMenuClick={this.toggleMainMenu}
-            />
+            <div>
+              <Header
+                currentMoneyBalance={this.state.currentMoneyBalance}
+                currentDebtBalance={this.state.currentDebtBalance}
+                currentDaysPassed={this.state.currentDaysPassed}
+                totalDaysTillGameOver={this.state.totalDaysTillGameOver}
+                currentLocationDetails={this.state.currentLocationDetails}
+              />
+              <Main
+                currentLocation={this.state.currentLocation}
+                rickAndMortyCharacter={this.state.rickAndMortyCharacter}
+                currentCharacter={this.state.currentCharacter}
+                state={this.state}
+                mainMenuClick={this.toggleMainMenu}
+              />
+            </div>
           )} />
         <Route exact path='/portal'><Portal {...this.props} /></Route>
         <Route exact path='/hello'>
@@ -349,6 +434,13 @@ class App extends Component
             onboardingDialogID={this.state.onboardingDialogID}
             onboardingDialog={onboardingDialogArray[this.state.onboardingDialogID]}
           /></Route>
+        <Route exact path="/gameover">
+          <Gameover
+            currentMoneyBalance={this.state.currentMoneyBalance}
+            currentDebtBalance={this.state.currentDebtBalance}
+            clickResetGame={this.clickResetGame}
+          />
+        </Route>
       </div>
     )
   }
