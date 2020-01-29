@@ -10,8 +10,9 @@ import Main from './components/Main'
 import { queryAPI } from './services/api-services'
 import { locationArray } from './services/locations'
 import { itemArray } from './services/items'
-import { characterArray, rickAndMortyCharacter } from './services/characters'
 import { onboardingDialogArray } from './services/onboarding-dialog'
+
+import { characterArray, rickAndMortyCharacter } from './services/characters'
 import { MainMenuSubMenuEnum, MainMenuSubMenuByID, MainMenuLength } from './services/enums'
 import Portal from './components/routed/Portal'
 import Onboarding from './components/routed/Onboarding'
@@ -38,7 +39,8 @@ class App extends Component
       currentMenuDisplayArray: [],
       currentItems: itemArray,
       currentMoneyBalance: 100,
-      onboardingComplete: false
+      onboardingComplete: false,
+      onboardingDialogID: 0
     }
   }
 
@@ -52,9 +54,15 @@ class App extends Component
     }
   }
 
+  onboardingNextButton = () =>
+  {
+    this.setState((prevState) => ({
+      onboardingDialogID: prevState.onboardingDialogID + 1,
+    }))
+  }
+
   onboardingCompleted = () =>
   {
-    console.log('onboard complete button')
     this.setState({
       onboardingComplete: true
     })
@@ -334,7 +342,13 @@ class App extends Component
             />
           )} />
         <Route exact path='/portal'><Portal {...this.props} /></Route>
-        <Route exact path='/hello'><Onboarding {...this.props} onboardingCompleted={this.onboardingCompleted} /></Route>
+        <Route exact path='/hello'>
+          <Onboarding {...this.props}
+            onboardingCompleted={this.onboardingCompleted}
+            onboardingNextButton={this.onboardingNextButton}
+            onboardingDialogID={this.state.onboardingDialogID}
+            onboardingDialog={onboardingDialogArray[this.state.onboardingDialogID]}
+          /></Route>
       </div>
     )
   }
