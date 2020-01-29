@@ -10,7 +10,7 @@ const MainMenuButton = (props) =>
                 <div className='trade-button-column-one'>
                     <div className='trade-button-ticker'>{tradeItem.ticker}</div>
                     <div className='trade-button-name'>{tradeItem.name}</div>
-                    <div className='trade-button-price'>⨎{tradeItem.basePrice}</div>
+                    <div className='trade-button-price'>⨎{tradeItem.currentPrice}</div>
                 </div>
                 <div className='trade-button-column-two'>
                     <div className='trade-button-detail-container'>

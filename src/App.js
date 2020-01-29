@@ -12,7 +12,7 @@ import { locationArray } from './services/locations'
 import { itemArray } from './services/items'
 import { onboardingDialogArray } from './services/onboarding-dialog'
 
-import { characterArray, rickAndMortyCharacter } from './services/characters'
+import { characterArray, rickAndMortyCharacter, krombopulosBichael } from './services/characters'
 import { MainMenuSubMenuEnum, MainMenuSubMenuByID, MainMenuLength } from './services/enums'
 import Portal from './components/routed/Portal'
 import Onboarding from './components/routed/Onboarding'
@@ -40,7 +40,7 @@ const defaultState = {
   currentDebtBalance: 5000,
   debtInterestRate: 1.1,
   currentDaysPassed: 0,
-  totalDaysTillGameOver: 2,
+  totalDaysTillGameOver: 30,
   secondToLastDay: false,
   gameOver: false,
   onboardingComplete: true, // change to false for game start
@@ -66,11 +66,12 @@ class App extends Component
   {
     // this.buildMenuDisplayArray(defaultState.currentSubMenu, defaultState.currentMainMenuOpen)
     this.locationQuery(this.state.currentLocation.api_id)
-    if (this.state.onboardingComplete == false)
+    if (this.state.onboardingComplete === false)
     {
       this.props.history.push('/hello')
     }
     this.toggleMainMenu()
+    this.adjustItemPrice()
   }
 
   onboardingNextButton = () =>
@@ -146,6 +147,27 @@ class App extends Component
       ({
         currentDebtBalance: Math.floor(prevState.currentDebtBalance * this.state.debtInterestRate)
       }))
+  }
+
+  adjustItemPrice = () =>
+  {
+    let adjustFactor = 0.6
+    let tempArray = this.state.currentItems.map((item) =>
+    {
+      let newItem = item
+      if (newItem.currentPrice)
+      {
+        newItem.currentPrice = Math.floor(newItem.currentPrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
+      }
+      else
+      {
+        newItem.currentPrice = Math.floor(newItem.basePrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
+      }
+      return newItem
+    })
+    this.setState({
+      currentItems: tempArray
+    })
   }
 
   clickPortal = (id) =>
@@ -225,6 +247,44 @@ class App extends Component
     this.toggleMainMenu()
   }
 
+  clickPayDebt = () =>
+  {
+    if (this.state.currentDebtBalance >= 1000)
+    {
+      if (this.canAfford(1000))
+      {
+        this.setState((prevState) =>
+          ({
+            currentMoneyBalance: prevState.currentMoneyBalance - 1000,
+            currentDebtBalance: prevState.currentDebtBalance - 1000
+          }))
+      }
+
+    } else
+    {
+      if (this.canAfford(this.state.currentDebtBalance))
+      {
+        this.setState((prevState) =>
+          ({
+            currentMoneyBalance: prevState.currentMoneyBalance - prevState.currentDebtBalance,
+            currentDebtBalance: prevState.currentDebtBalance - prevState.currentDebtBalance
+          }))
+      }
+    }
+  }
+
+  clickGetDebt = () =>
+  {
+    if (this.state.currentDebtBalance < 10000)
+    {
+      this.setState((prevState) =>
+        ({
+          currentMoneyBalance: prevState.currentMoneyBalance + 1000,
+          currentDebtBalance: prevState.currentDebtBalance + 1000
+        }))
+    }
+  }
+
   gameOver = () =>
   {
     this.props.history.push('/gameover')
@@ -287,32 +347,60 @@ class App extends Component
             )
           )
 
-
         case MainMenuSubMenuEnum.trade:
-          return (
-            newArray.concat(
-              this.state.currentItems.map(item =>
-                ([
-                  { trade: item, click: null },
-                  { name: 'Sell', click: () => { this.clickSell(item.id) } },
-                  { name: 'Buy', click: () => { this.clickBuy(item.id) } }
-                ])
+          if (this.state.currentCharacter.id == 196)
+          {
+            return (
+              newArray.concat([[
+                { name: 'Debt', click: null },
+                { name: 'Get Debt', click: () => { this.clickGetDebt() } },
+                { name: 'Pay Debt', click: () => { this.clickPayDebt() } }
+              ]])
+            )
+          }
+          else
+          {
+            return (
+              newArray.concat(
+                this.state.currentItems.map(item =>
+                  ([
+                    { trade: item, click: null },
+                    { name: 'Sell', click: () => { this.clickSell(item.id) } },
+                    { name: 'Buy', click: () => { this.clickBuy(item.id) } }
+                  ])
+                )
               )
             )
-          )
+          }
 
         case MainMenuSubMenuEnum.talk:
           return (
+            // newArray.concat(
+            //   this.state.currentLocationCharacters.filter(character =>
+            //     (character !== this.state.currentCharacter)).map(character =>
+            //       ([
+            //         { name: character.name, click: null },
+            //         { name: null, click: null },
+            //         { name: 'Talk', click: () => { this.clickTalk(character.id) } }
+            //       ])
+            //     )
+            // )
+
             newArray.concat(
-              this.state.currentLocationCharacters.filter(character =>
-                (character !== this.state.currentCharacter)).map(character =>
-                  ([
-                    { name: character.name, click: null },
-                    { name: null, click: null },
-                    { name: 'Talk', click: () => { this.clickTalk(character.id) } }
-                  ])
-                )
+              this.state.currentLocationCharacters.map(character =>
+                ([
+                  { name: character.name, click: null },
+                  { name: null, click: null },
+                  {
+                    name: (character === this.state.currentCharacter ? '' : 'Talk'), click: () =>
+                    {
+                      (character === this.state.currentCharacter ? console.log() : this.clickTalk(character.id))
+                    }
+                  }
+                ])
+              )
             )
+
           )
         default:
       }
@@ -380,6 +468,14 @@ class App extends Component
 
       // console.log('is array ' + Array.isArray(queryResult))
       // console.log(queryResult)
+
+      console.log(characterQueryResult)
+      if (characterQueryResult.id == 242)
+      {
+        console.log('add array')
+        characterQueryResult = [characterQueryResult, krombopulosBichael]
+      }
+
       if (Array.isArray(characterQueryResult))
       {
         let aliveCharacters = characterQueryResult.filter((character) => (character.status.toLowerCase() !== "dead"))
