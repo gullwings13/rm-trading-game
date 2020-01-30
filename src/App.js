@@ -17,6 +17,8 @@ import { MainMenuSubMenuEnum, MainMenuSubMenuByID, MainMenuLength } from './serv
 import Portal from './components/routed/Portal'
 import Onboarding from './components/routed/Onboarding'
 import Gameover from './components/routed/Gameover'
+import Info from './components/routed/Info'
+import GameStart from './components/routed/GameStart'
 
 // const defaultMenu = [
 //   [
@@ -66,10 +68,7 @@ class App extends Component
   {
     // this.buildMenuDisplayArray(defaultState.currentSubMenu, defaultState.currentMainMenuOpen)
     this.locationQuery(this.state.currentLocation.api_id)
-    if (this.state.onboardingComplete === false)
-    {
-      this.props.history.push('/hello')
-    }
+    this.props.history.push('/welcome')
     this.toggleMainMenu()
     this.adjustItemPrice()
   }
@@ -157,11 +156,17 @@ class App extends Component
       let newItem = item
       if (newItem.currentPrice)
       {
+        // existing price, adjust based on existing price
+        let tempPrice = newItem.currentPrice
         newItem.currentPrice = Math.floor(newItem.currentPrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
+        newItem.currentPrice = newItem.currentPrice < 1 ? 1 : newItem.currentPrice
+        newItem.change = newItem.currentPrice - tempPrice
       }
       else
       {
+        // New price, adjust based on base price
         newItem.currentPrice = Math.floor(newItem.basePrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
+        newItem.change = 0
       }
       return newItem
     })
@@ -170,24 +175,69 @@ class App extends Component
     })
   }
 
+  newGame = () =>
+  {
+    if (this.state.onboardingComplete === false)
+    {
+
+    }
+  }
+
+  loadGame = (potentialLoadGame) =>
+  {
+    this.setState(JSON.parse(potentialLoadGame))
+  }
+
+  saveGame = () =>
+  {
+    localStorage.setItem('RMTradingGameSave', JSON.stringify(this.state))
+  }
+
+  clickContinueGame = () =>
+  {
+    let potentialLoadGame = localStorage.getItem('RMTradingGameSave')
+
+    if (potentialLoadGame != null)
+    {
+      console.log('load game exists')
+      this.loadGame(potentialLoadGame)
+      this.buildMenuDisplayArray(defaultState.currentSubMenu, defaultState.currentMainMenuOpen)
+    }
+    else
+    {
+      console.log('no load game')
+    }
+
+
+  }
+
+
+  randomEvents = () =>
+  {
+
+  }
+
   clickPortal = (id) =>
   {
     // console.log(this.props)
     this.props.history.push('/portal')
     this.advanceDaysPassed()
     this.addInterestToDebt()
+    this.adjustItemPrice()
+    this.randomEvents()
     this.setState((prevState) =>
       ({
         currentLocation: locationArray[id]
       }))
     this.locationQuery(locationArray[id].api_id)
     this.toggleMainMenu()
+    this.saveGame()
   }
 
   clickBuy = (id) =>
   {
     let amount = 1
-    let cost = this.state.currentItems[id].basePrice
+    let cost = this.state.currentItems[id].currentPrice
     let totalCost = cost * amount
     if (this.canAfford(totalCost))
     {
@@ -198,6 +248,7 @@ class App extends Component
           currentItems: tempArray,
           currentMoneyBalance: prevState.currentMoneyBalance - totalCost
         }))
+      this.saveGame()
     }
     else
     {
@@ -207,7 +258,7 @@ class App extends Component
   clickSell = (id) =>
   {
     let amount = 1
-    let cost = this.state.currentItems[id].basePrice
+    let cost = this.state.currentItems[id].currentPrice
     let totalCost = cost * amount
     if (this.canSell(amount, id))
     {
@@ -218,6 +269,7 @@ class App extends Component
           currentItems: tempArray,
           currentMoneyBalance: prevState.currentMoneyBalance + totalCost
         }))
+      this.saveGame()
     }
     else
     {
@@ -237,8 +289,6 @@ class App extends Component
 
   clickTalk = (api_id) =>
   {
-    console.log('talk to ' + api_id)
-
     let id = this.convertCharacterAPIIDtoArrayID(api_id)
     this.setState((prevState) =>
       ({
@@ -258,6 +308,7 @@ class App extends Component
             currentMoneyBalance: prevState.currentMoneyBalance - 1000,
             currentDebtBalance: prevState.currentDebtBalance - 1000
           }))
+        this.saveGame()
       }
 
     } else
@@ -269,6 +320,7 @@ class App extends Component
             currentMoneyBalance: prevState.currentMoneyBalance - prevState.currentDebtBalance,
             currentDebtBalance: prevState.currentDebtBalance - prevState.currentDebtBalance
           }))
+
       }
     }
   }
@@ -295,6 +347,11 @@ class App extends Component
     this.setState(defaultState)
     this.locationQuery(defaultState.currentLocation.api_id)
     this.toggleMainMenu()
+  }
+
+  clickNewGame = () =>
+  {
+    this.clickResetGame()
   }
 
   convertCharacterAPIIDtoArrayID = (api_id) =>
@@ -348,7 +405,7 @@ class App extends Component
           )
 
         case MainMenuSubMenuEnum.trade:
-          if (this.state.currentCharacter.id == 196)
+          if (this.state.currentCharacter.id === 196)
           {
             return (
               newArray.concat([[
@@ -375,16 +432,6 @@ class App extends Component
 
         case MainMenuSubMenuEnum.talk:
           return (
-            // newArray.concat(
-            //   this.state.currentLocationCharacters.filter(character =>
-            //     (character !== this.state.currentCharacter)).map(character =>
-            //       ([
-            //         { name: character.name, click: null },
-            //         { name: null, click: null },
-            //         { name: 'Talk', click: () => { this.clickTalk(character.id) } }
-            //       ])
-            //     )
-            // )
 
             newArray.concat(
               this.state.currentLocationCharacters.map(character =>
@@ -466,13 +513,8 @@ class App extends Component
       let queryString = `https://rickandmortyapi.com/api/character/${charString}`
       let characterQueryResult = await queryAPI(queryString)
 
-      // console.log('is array ' + Array.isArray(queryResult))
-      // console.log(queryResult)
-
-      console.log(characterQueryResult)
-      if (characterQueryResult.id == 242)
+      if (characterQueryResult.id === 242)
       {
-        console.log('add array')
         characterQueryResult = [characterQueryResult, krombopulosBichael]
       }
 
@@ -537,6 +579,8 @@ class App extends Component
             clickResetGame={this.clickResetGame}
           />
         </Route>
+        <Route exact path='/info'><Info /></Route>
+        <Route exact path='/welcome'><GameStart clickNewGame={this.clickNewGame} clickContinueGame={this.clickContinueGame} /></Route>
       </div>
     )
   }

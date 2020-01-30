@@ -4,18 +4,17 @@ import portal from '../../images/portal.png'
 
 const Portal = (props) =>
 {
-    console.log(props)
-
     useEffect(() =>
     {
         setTimeout(() => { props.history.push('/') }, 2000)
     }
+        // eslint-disable-next-line
         , [])
 
     return (
         <div className='portal-image-container-container'>
             <div className='portal-image-container'>
-                <img className='portal-image' src={portal} />
+                <img className='portal-image' src={portal} alt='twirling green portal' />
             </div>
         </div>
     )

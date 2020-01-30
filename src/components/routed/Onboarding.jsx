@@ -4,7 +4,7 @@ const Onboarding = (props) =>
 {
     const rickSays = () =>
     {
-        if (props.onboardingDialog.name == 'rick')
+        if (props.onboardingDialog.name === 'rick')
         {
             return props.onboardingDialog.words
         }
@@ -13,7 +13,7 @@ const Onboarding = (props) =>
 
     const mortySays = () =>
     {
-        if (props.onboardingDialog.name == 'morty')
+        if (props.onboardingDialog.name === 'morty')
         {
             return props.onboardingDialog.words
         }
@@ -22,7 +22,7 @@ const Onboarding = (props) =>
 
     const nextButton = () =>
     {
-        if (props.onboardingDialog.buttonid == 0)
+        if (props.onboardingDialog.buttonid === 0)
         {
             return (<button className='button onboarding-button' onClick={props.onboardingNextButton}>Next</button>)
         }
