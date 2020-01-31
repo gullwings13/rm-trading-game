@@ -20,6 +20,7 @@ const GameStart = (props) =>
                 <NavLink className='new-game-link' onClick={props.clickNewGame} to='/hello'>New Game</NavLink>
                 <div>
                     <p>Programming by Trevor Smith-Holbourn</p>
+                    <p>Data from https://rickandmortyapi.com/</p>
                     <p>Created by Justin Roiland and Dan Harmon</p>
                     <p>Credit to the artists from Adult Swim for all artwork</p>
                 </div>

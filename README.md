@@ -76,28 +76,31 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 
 ### MVP
 
-- Build App as class component
-- Make use of Rick and Morty API
-- Present player with a menu
-- Allow player to either fly to a new location or trade items/money 
-- Create game objectives and game over state (goal will be to pay back loan shark with earnings made during game)
-- Use local storage to save player state
-- Allow user to wipe local storage saved state to play again
-- Create hard coded list of tradeable items
+- Build App as class component - DONE
+- Make use of Rick and Morty API - DONE
+- Present player with a menu - DONE
+- Allow player to either fly to a new location or trade items/money  - DONE
+- Create game objectives and game over state (goal will be to pay back loan shark with earnings made during game)  - DONE
+- Use local storage to save player state - NOT DONE
+- Allow user to wipe local storage saved state to play again - NOT DONE
+- Create hard coded list of tradeable items DONE
 
 ### Post-MVP
 
-- Convert App to functional component
-- Allow players to visit other characters in each location
-- Incorporate tradeable items/creatures from another API as rare finds (eg pokemon)
-- Incorporate natural language API and convert to text based controls (from button based)
-- Graph value of each item over time
-- Add sounds from RM 
-- Add quotes from RM
+- Convert App to functional component - NOT DONE
+- Allow players to visit other characters in each location - DONE
+- Incorporate tradeable items/creatures from another API as rare finds (eg pokemon) - NOT DONE
+- Incorporate natural language API and convert to text based controls (from button based) - NOT DONE
+- Graph value of each item over time - NOT DONE
+- Add sounds from RM - NOT DONE
+- Add quotes from RM - NOT DONE
 
 ## React Component Hierarchy
-
+### Initial:
 <a href='https://photos.app.goo.gl/eR6BKLCXi7Zc2QCU9'><img src='https://media.giphy.com/media/WpV4yAkqm6h7Nmu6j2/giphy.gif'/></a>
+
+### Final:
+
 
 ## Components
 
