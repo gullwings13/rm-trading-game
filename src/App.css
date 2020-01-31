@@ -403,6 +403,11 @@ a:hover {
   transform: translateY(2px);
 }
 
+.but-hover:hover{
+    background-color: white
+}
+
+
 a:active {
   box-shadow: none;
   top: 5px;

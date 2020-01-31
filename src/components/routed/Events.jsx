@@ -18,12 +18,9 @@ const Events = (props) =>
             break
     }
 
-
     return (
 
         <div className='event-container'>
-            {/* <h1>events</h1> */}
-            {/* <h2>{props.event}</h2> */}
             {props.eventText.map((event, index) => (
                 <h3 key={index}>{event}</h3>
             ))}

@@ -34,7 +34,7 @@ const MainMenuButton = (props) =>
             return (
                 <button
                     onClick={buttonObject.click}
-                    className={className}
+                    className={buttonObject.click ? className + ' but-hover' : className}
                 >{tradeFormat(buttonObject.trade)}
                 </button>
             )
@@ -48,7 +48,8 @@ const MainMenuButton = (props) =>
             return (
                 <button
                     onClick={buttonObject.click}
-                    className={(buttonObject.name === '>' || buttonObject.name === '<') ? className : className + ' sub'}
+                    className={(buttonObject.name === '>' || buttonObject.name === '<') ? className + ' but-hover' :
+                        buttonObject.click ? className + ' but-hover sub' : className + ' sub'}
                 ><span>{buttonObject.name}</span>
                 </button>
             )

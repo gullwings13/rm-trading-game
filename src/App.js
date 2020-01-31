@@ -508,9 +508,10 @@ class App extends Component
                   { name: character.name, click: null },
                   { name: null, click: null },
                   {
-                    name: (character === this.state.currentCharacter ? '' : 'Talk'), click: () =>
+                    name: (character === this.state.currentCharacter ? '' : 'Talk'),
+                    click: character === this.state.currentCharacter ? null : () =>
                     {
-                      (character === this.state.currentCharacter ? console.log() : this.clickTalk(character.id))
+                      (this.clickTalk(character.id))
                     }
                   }
                 ])
