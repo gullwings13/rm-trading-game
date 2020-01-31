@@ -14,6 +14,7 @@ h1,h2,h3,h4,h5{
     font-family: 'Lilita One', cursive;
 }
 
+
 .header{
     position: fixed;
     width: 100vw;
@@ -234,7 +235,7 @@ h1,h2,h3,h4,h5{
     flex-direction: column;
     width: 40%;
     height: 100%;
-    background-color: chartreuse;
+    background-color: cornflowerblue;
     text-align: left;
 }
 
@@ -261,7 +262,7 @@ h1,h2,h3,h4,h5{
 .trade-button-detail-label{
     font-size: 9px;
     text-align: left;
-    background-color: cornflowerblue;
+    /* background-color: cornflowerblue; */
     width: 100%;
     margin: 2px;
 }
@@ -296,12 +297,16 @@ h1,h2,h3,h4,h5{
     flex-direction: column;
     padding: 20px;
     align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(49, 35, 49);
 }
 
 .onboarding-char-container{
     width: 100vw;
     display: flex;
     justify-content: space-evenly;
+    color: violet;
 }
 
 .onboarding-char-image{
@@ -322,22 +327,107 @@ h1,h2,h3,h4,h5{
     width: 100px;
     height: 50px;
     font-size: 30px;
+    color: white;
+    background-color: violet;
+    box-shadow: 2px 2px 0 #558ABB;
+}
+
+.event-container
+{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(49, 35, 49);
+    color: violet;
+    font-size: 20px;
+}
+
+.gamestart-text-container{
+    font-family: 'Open Sans', sans-serif;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    top:0;
+    align-items: center;
+    justify-content: space-evenly;
+    z-index: 10;
+}
+
+.gamestart-text-container h1 {
+    /* font-family: 'Open Sans', sans-serif; */
+    color: violet;
+    text-shadow: 3px 3px #558ABB;
+    font-size: 70px;
+    text-align: center;
+    -webkit-text-fill-color: violet; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
 }
 
 
+.gamestart-text-container p {
+    font-family: 'Open Sans', sans-serif;
+    color: violet;
+    text-align: center;
+}
 
 
-@media only screen 
-    and (orientation: landscape)
-  {
-    body{
-        background-color:red;
-        
+a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: violet;
+    box-shadow: 2px 2px 0 #558ABB;
+    color: white;
+    padding: 1em 1.5em;
+    position: relative;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+a:hover {
+  background-color: rgb(241, 158, 241);
+  box-shadow: unset;
+  cursor: pointer;
+  transform: translateY(2px);
+}
+
+a:active {
+  box-shadow: none;
+  top: 5px;
+}
+
+#video-container{
+    position: relative;
+    width: vw100;
+    height: vh100;
+    overflow: hidden;
+}
+
+@media (min-aspect-ratio: 5 / 3) {
+    #game-start-video{
+        position:relative;
+        width:100%;
+        height:56.25vw;
+        margin-top: 0;
     }
-    .cash-text{
-        color: greenyellow;
+
+}
+
+@media (max-aspect-ratio: 5 / 3) {
+    #game-start-video{
+        position: relative;
+        height:100vh;
+        width:178vh;
+        margin-left:calc((178vh - 100vw) / 2 * -1)
     }
-  }
+}
 
   @keyframes portal-twirl
   {
@@ -364,6 +454,15 @@ h1,h2,h3,h4,h5{
         transform: scale(0.9);
       }
   }
+
+
+@media only screen and (max-width: 400px)
+{
+    .onboarding-char-container{
+        flex-direction: column;
+        align-items: center;
+    }
+}
 
 
 /* .fade-appear{

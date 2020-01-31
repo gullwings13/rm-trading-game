@@ -17,7 +17,7 @@ const MainMenu = (props) =>
 
     return (
         <div className='main-menu-container'>
-            {props.state.currentMenuDisplayArray.map((buttonArray, index) =>
+            {props.state.currentMenuDisplayArray && props.state.currentMenuDisplayArray.map((buttonArray, index) =>
                 (
                     <MainMenuButton
                         key={index}

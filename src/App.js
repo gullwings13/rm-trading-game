@@ -19,14 +19,9 @@ import Onboarding from './components/routed/Onboarding'
 import Gameover from './components/routed/Gameover'
 import Info from './components/routed/Info'
 import GameStart from './components/routed/GameStart'
+import Events from './components/routed/Events'
 
-// const defaultMenu = [
-//   [
-//     { name: MainMenuSubMenuEnum.portal, click: this.toggleMainMenu },
-//     { name: '<', click: () => { this.prevSubMenu(-1) } },
-//     { name: '>', click: () => { this.prevSubMenu(1) } },
-//   ]
-// ]
+
 
 const defaultState = {
   currentLocation: locationArray[1],
@@ -47,12 +42,10 @@ const defaultState = {
   gameOver: false,
   onboardingComplete: true, // change to false for game start
   onboardingDialogID: 0,
+  event: null,
+  eventText: [],
 }
 
-// leave april 10  - first day of leave april 13
-// weeks off 13 and 20
-// come back on april 23rd or 22
-// come april 27
 
 class App extends Component
 {
@@ -64,9 +57,16 @@ class App extends Component
     this.buildMenuDisplayArray(defaultState.currentSubMenu, defaultState.currentMainMenuOpen)
   }
 
+  defaultMenu = [
+    [
+      { name: MainMenuSubMenuEnum.portal, click: this.toggleMainMenu },
+      { name: '<', click: () => { this.prevSubMenu(-1) } },
+      { name: '>', click: () => { this.prevSubMenu(1) } },
+    ]
+  ]
+
   componentDidMount()
   {
-    // this.buildMenuDisplayArray(defaultState.currentSubMenu, defaultState.currentMainMenuOpen)
     this.locationQuery(this.state.currentLocation.api_id)
     this.props.history.push('/welcome')
     this.toggleMainMenu()
@@ -128,7 +128,7 @@ class App extends Component
         ({
           secondToLastDay: true
         }))
-      // this.buildPortalMenuForFinalDay()
+
     }
     else if (newDay === this.state.totalDaysTillGameOver + 1)
     {
@@ -136,7 +136,6 @@ class App extends Component
         ({
           gameOver: true
         }))
-      // this.buildPortalMenuForFinalDay()
     }
   }
 
@@ -154,20 +153,9 @@ class App extends Component
     let tempArray = this.state.currentItems.map((item) =>
     {
       let newItem = item
-      if (newItem.currentPrice)
-      {
-        // existing price, adjust based on existing price
-        let tempPrice = newItem.currentPrice
-        newItem.currentPrice = Math.floor(newItem.currentPrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
-        newItem.currentPrice = newItem.currentPrice < 1 ? 1 : newItem.currentPrice
-        newItem.change = newItem.currentPrice - tempPrice
-      }
-      else
-      {
-        // New price, adjust based on base price
-        newItem.currentPrice = Math.floor(newItem.basePrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
-        newItem.change = 0
-      }
+      let tempPrice = newItem.currentPrice ? newItem.currentPrice : 'n/a'
+      newItem.currentPrice = Math.floor(newItem.basePrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
+      newItem.change = newItem.currentPrice - tempPrice
       return newItem
     })
     this.setState({
@@ -183,55 +171,150 @@ class App extends Component
     }
   }
 
-  loadGame = (potentialLoadGame) =>
+  getRandomItemID = () =>
   {
-    this.setState(JSON.parse(potentialLoadGame))
+    return Math.floor(Math.random() * this.state.currentItems.length)
   }
 
-  saveGame = () =>
+  getRandomAdjustAmount = (id, highLow) =>
   {
-    localStorage.setItem('RMTradingGameSave', JSON.stringify(this.state))
-  }
-
-  clickContinueGame = () =>
-  {
-    let potentialLoadGame = localStorage.getItem('RMTradingGameSave')
-
-    if (potentialLoadGame != null)
+    let adjustFactor = 0.6
+    if (highLow == 'high')
     {
-      console.log('load game exists')
-      this.loadGame(potentialLoadGame)
-      this.buildMenuDisplayArray(defaultState.currentSubMenu, defaultState.currentMainMenuOpen)
+      return Math.floor(this.state.currentItems[id].highPrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
     }
     else
     {
-      console.log('no load game')
+      return Math.floor(this.state.currentItems[id].lowPrice * ((Math.random() * adjustFactor)))
     }
-
-
   }
 
+  adjustIndividualItemPrice = (id, amount) =>
+  {
+    let tempArray = this.state.currentItems
+    let tempPrice = tempArray[id].currentPrice
+    tempArray[id].currentPrice += amount
+    tempArray[id].change = tempArray[id].currentPrice - tempPrice
+    this.setState({
+      currentItems: tempArray
+    })
+  }
+
+  adjustItemHigh = () =>
+  {
+    let highId = this.getRandomItemID()
+    this.adjustIndividualItemPrice(highId, this.getRandomAdjustAmount(highId, 'high'))
+    this.setState((prevState) => ({
+      eventText: prevState.eventText.concat([`Prices of ${this.state.currentItems[highId].name} are sky high!`])
+    }))
+    return highId
+  }
+
+  adjustItemLow = () =>
+  {
+    let lowId = this.getRandomItemID()
+    this.adjustIndividualItemPrice(lowId, this.getRandomAdjustAmount(lowId, 'low'))
+    this.setState((prevState) => ({
+      eventText: prevState.eventText.concat([`Prices of ${this.state.currentItems[lowId].name} have hit rock bottom!`])
+    }))
+    return lowId
+  }
+
+  freeItem = () =>
+  {
+    let freeId = this.getRandomItemID()
+    let randomAmount = Math.ceil(Math.random() * 10) + 2
+    this.addRemoveItem(freeId, randomAmount)
+    this.setState((prevState) => ({
+      eventText: prevState.eventText.concat([`You found ${randomAmount} ${this.state.currentItems[freeId].name}s`])
+    }))
+    return freeId
+  }
 
   randomEvents = () =>
   {
+    let chanceResult = Math.floor(Math.random() * 10)
+    switch (chanceResult)
+    {
+      case 0:
+      case 1:
+      case 2:
+      case 3:
+        this.props.history.push('/')
+        break
+      case 4:
+      case 5:
+        this.setState({
+          event: '1high1low',
+          eventText: []
+        })
+        this.adjustItemHigh()
+        this.adjustItemLow()
+        this.props.history.push('/event')
+        break
+      case 6:
+        this.setState({
+          event: '2high',
+          eventText: []
+        })
+        this.adjustItemHigh()
+        this.adjustItemHigh()
+        this.props.history.push('/event')
+        break
+      case 7:
+        this.setState({
+          event: '1high',
+          eventText: []
+        })
+        this.adjustItemHigh()
+        this.props.history.push('/event')
+        break
 
+      case 8:
+        this.setState({
+          event: '1low',
+          eventText: []
+        })
+        this.adjustItemLow()
+        this.props.history.push('/event')
+        break
+
+      case 9:
+        this.setState({
+          event: 'free',
+          eventText: []
+        })
+        this.freeItem()
+        this.props.history.push('/event')
+        break
+
+      default:
+        break
+    }
   }
 
   clickPortal = (id) =>
   {
-    // console.log(this.props)
     this.props.history.push('/portal')
     this.advanceDaysPassed()
     this.addInterestToDebt()
     this.adjustItemPrice()
-    this.randomEvents()
     this.setState((prevState) =>
       ({
         currentLocation: locationArray[id]
       }))
     this.locationQuery(locationArray[id].api_id)
     this.toggleMainMenu()
-    this.saveGame()
+  }
+
+  addRemoveItem = (id, amount) =>
+  {
+    let tempArray = this.state.currentItems
+    tempArray[id].owned += amount
+    this.setState((prevState) =>
+      ({
+        currentItems: tempArray
+      }))
   }
 
   clickBuy = (id) =>
@@ -241,17 +324,11 @@ class App extends Component
     let totalCost = cost * amount
     if (this.canAfford(totalCost))
     {
-      let tempArray = this.state.currentItems
-      tempArray[id].owned += 1
+      this.addRemoveItem(id, amount)
       this.setState((prevState) =>
         ({
-          currentItems: tempArray,
           currentMoneyBalance: prevState.currentMoneyBalance - totalCost
         }))
-      this.saveGame()
-    }
-    else
-    {
     }
   }
 
@@ -262,18 +339,11 @@ class App extends Component
     let totalCost = cost * amount
     if (this.canSell(amount, id))
     {
-      let tempArray = this.state.currentItems
-      tempArray[id].owned -= 1
+      this.addRemoveItem(id, -amount)
       this.setState((prevState) =>
         ({
-          currentItems: tempArray,
           currentMoneyBalance: prevState.currentMoneyBalance + totalCost
         }))
-      this.saveGame()
-    }
-    else
-    {
-
     }
   }
 
@@ -308,7 +378,6 @@ class App extends Component
             currentMoneyBalance: prevState.currentMoneyBalance - 1000,
             currentDebtBalance: prevState.currentDebtBalance - 1000
           }))
-        this.saveGame()
       }
 
     } else
@@ -460,18 +529,24 @@ class App extends Component
 
   toggleMainMenu = () =>
   {
+    let newMenuItems = this.buildMenuDisplayArray(this.state.currentSubMenu, !this.state.currentMainMenuOpen)
+    if (!newMenuItems)
+    {
+      newMenuItems = this.buildMenuDisplayArray(defaultState.currentSubMenu, !this.state.currentMainMenuOpen)
+    }
+
     if (this.state.currentMainMenuOpen)
     {
       this.setState((prevState) => ({
         currentMainMenuOpen: false,
-        currentMenuDisplayArray: this.buildMenuDisplayArray(prevState.currentSubMenu, false)
+        currentMenuDisplayArray: newMenuItems
       }))
     }
     else
     {
       this.setState((prevState) => ({
         currentMainMenuOpen: true,
-        currentMenuDisplayArray: this.buildMenuDisplayArray(prevState.currentSubMenu, true)
+        currentMenuDisplayArray: newMenuItems
       }))
     }
   }
@@ -564,7 +639,9 @@ class App extends Component
               />
             </div>
           )} />
-        <Route exact path='/portal'><Portal {...this.props} /></Route>
+        <Route exact path='/portal'>
+          <Portal randomEvents={this.randomEvents} {...this.props} />
+        </Route>
         <Route exact path='/hello'>
           <Onboarding {...this.props}
             onboardingCompleted={this.onboardingCompleted}
@@ -580,6 +657,7 @@ class App extends Component
           />
         </Route>
         <Route exact path='/info'><Info /></Route>
+        <Route exact path='/event'><Events event={this.state.event} eventText={this.state.eventText} /></Route>
         <Route exact path='/welcome'><GameStart clickNewGame={this.clickNewGame} clickContinueGame={this.clickContinueGame} /></Route>
       </div>
     )

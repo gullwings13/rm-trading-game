@@ -6,7 +6,11 @@ const Portal = (props) =>
 {
     useEffect(() =>
     {
-        setTimeout(() => { props.history.push('/') }, 2000)
+        setTimeout(() =>
+        {
+            console.log('running random events next')
+            props.randomEvents()
+        }, 2000)
     }
         // eslint-disable-next-line
         , [])
