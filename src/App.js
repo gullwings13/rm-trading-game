@@ -153,7 +153,7 @@ class App extends Component
     let tempArray = this.state.currentItems.map((item) =>
     {
       let newItem = item
-      let tempPrice = newItem.currentPrice ? newItem.currentPrice : 'n/a'
+      let tempPrice = newItem.currentPrice ? newItem.currentPrice : 0
       newItem.currentPrice = Math.floor(newItem.basePrice * ((Math.random() * adjustFactor) + (1 - adjustFactor / 2)))
       newItem.change = newItem.currentPrice - tempPrice
       return newItem

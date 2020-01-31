@@ -8,7 +8,6 @@ const Portal = (props) =>
     {
         setTimeout(() =>
         {
-            console.log('running random events next')
             props.randomEvents()
         }, 2000)
     }
