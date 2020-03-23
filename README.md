@@ -70,7 +70,8 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 
 ## Wireframes
 
-<a href='https://photos.app.goo.gl/A6iCJ9dMjb6chRi16'><img src='https://media.giphy.com/media/dv7BUjMGA6WJppyRdn/giphy.gif'/></a>
+<img src='https://media.giphy.com/media/dv7BUjMGA6WJppyRdn/giphy.gif'/>
+<img src='./wireframes.png'/></a>
 
 ### MVP
 
@@ -116,10 +117,6 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 | MainMenu | Will give the option to move between menus | Functional |
 
 
-## Priority Matrix
-
-<a href='https://photos.app.goo.gl/U1L7YrX67qDwGSX39'><img src='https://media.giphy.com/media/dXQn9l4SkcjtR1wwA5/giphy.gif'/></a>
-
 ## Timeframes
 
 
@@ -128,7 +125,7 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 | API Call | H | 2hrs| 1hrs | 1hrs |
 | Basic Layout | H | 4hrs| 5hrs | 5hrs |
 | Base CSS | M | 4hrs| 3hrs | 3hrs |
-| Game Loop | H | 5hrs| 10-hrs | 10hrs |
+| Game Loop | H | 5hrs| 10hrs | 10hrs |
 | Clickable model | H | 4hrs| 5hrs | 5hrs |
 | Polished CSS | M | 8hrs| 7hrs | 7hrs |
 | Game Win and Lose and onboarding | H | 8hrs| 5hrs | 5hrs |
@@ -138,35 +135,46 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 
 |  Day | Deliverable | Status
 |---|---| ---|
-|Jan 24th| Project Pitch / Wireframes / Priority Matrix / Functional Components | Incomplete
-|Jan 27th| PsuedoCode, Explore Data Structure and White Boarding | Incomplete
-|Jan 28th| Actual code and Initial Clickable Model | Incomplete
-|Jan 29th| MVP  | Incomplete
-|Jan 30th| POST MVP | Incomplete
-|Jan 31tst| Present | Incomplete
+|Jan 24th| Project Pitch / Wireframes / Priority Matrix / Functional Components | Complete
+|Jan 27th| PsuedoCode, Explore Data Structure and White Boarding | Complete
+|Jan 28th| Actual code and Initial Clickable Model | Complete
+|Jan 29th| MVP  | Complete
+|Jan 30th| POST MVP | Complete
+|Jan 31tst| Present | Complete
 
 ## Additional Libraries
 
-Will probably look to use c3.js if I am able to get to the graphing portion
+Would like to use c3.js if I am able to get to the graphing portion.
 
 ## Issues and Resolutions
 
 Potential issue is locations do not come with images, thus will need to be hard coded. To address I will limit the scope of locations a player can travel to while sourcing background images by hand. The same applies to items to be traded, though the number of those will probably be limited to 5 or less thus will not present as much of an issue.
 
-My original menu was expecting a single string as the name for the button. However i wanted to show more info on the trading buttons (Ticker, Name, Cost, Amount Owned). To resolve I instead sent an object with seperate keys in place of the single string for the name, but only for trading buttons. I then added logic in the MainMenuButton component to check for an object and use a different function for rendering the trading button
+My original menu was expecting a single string as the name for the button. However i wanted to show more info on the trading buttons (Ticker, Name, Cost, Amount Owned). To resolve I instead sent an object with seperate keys in place of the single string for the name, but only for trading buttons. I then added logic in the MainMenuButton component to check for an object and use a different function for rendering the trading button.
 
-Local Storage
+Local Storage proved to be difficult due to still fairly early understanding of state and is async nature.
 
-Animations
+I had hoped to be able to animate the menu (Animation of the adding and removing of components) but ran into time contraints.
 
 ## Code Snippet
 
 Use this section to include a brief code snippet you are proud of, along with a brief description of why.
 
 ```
-function reverse(string) {
-	// here is the code to reverse a string of text
-}
+clickBuy = (id) =>
+  {
+    let amount = 1
+    let cost = this.state.currentItems[id].currentPrice
+    let totalCost = cost * amount
+    if (this.canAfford(totalCost))
+    {
+      this.addRemoveItem(id, amount)
+      this.setState((prevState) =>
+        ({
+          currentMoneyBalance: prevState.currentMoneyBalance - totalCost
+        }))
+    }
+  }
 ```
 
 ## Change Log
