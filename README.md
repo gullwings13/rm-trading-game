@@ -1,11 +1,9 @@
-# Project Overview
-
 ## Rick and Morty Trading Game
 Travel to different Rick and Morty locations and trade items so you can pay back some debt
 
 **Project decription:** I plan to make a single page game that lets the player explore the RM universe and trade items. This will use the rick and morty api
 
-## API Snippet
+## API Snippet (from rickandmortyapi.com)
 
 ```
 {
