@@ -100,7 +100,7 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 <a href='https://photos.app.goo.gl/eR6BKLCXi7Zc2QCU9'><img src='https://media.giphy.com/media/WpV4yAkqm6h7Nmu6j2/giphy.gif'/></a>
 
 ### Final:
-
+<a href='https://photos.app.goo.gl/LB3LLUKpWG6wnfwR6'>Final</a>
 
 ## Components
 
@@ -127,14 +127,14 @@ Travel to different Rick and Morty locations and trade items so you can pay back
 
 | Component | Priority | Estimated Time | Time Invested | Actual Time |
 | --- | :---: |  :---: | :---: | :---: |
-| API Call | H | 2hrs| -hrs | -hrs |
-| Basic Layout | H | 4hrs| -hrs | -hrs |
-| Base CSS | M | 4hrs| -hrs | -hrs |
-| Game Loop | H | 5hrs| -hrs | -hrs |
-| Clickable model | H | 4hrs| -hrs | -hrs |
-| Polished CSS | M | 8hrs| -hrs | -hrs |
-| Game Win and Lose and onboarding | H | 8hrs| -hrs | -hrs |
-| Total | H | 35hrs| -hrs | -hrs |
+| API Call | H | 2hrs| 1hrs | 1hrs |
+| Basic Layout | H | 4hrs| 5hrs | 5hrs |
+| Base CSS | M | 4hrs| 3hrs | 3hrs |
+| Game Loop | H | 5hrs| 10-hrs | 10hrs |
+| Clickable model | H | 4hrs| 5hrs | 5hrs |
+| Polished CSS | M | 8hrs| 7hrs | 7hrs |
+| Game Win and Lose and onboarding | H | 8hrs| 5hrs | 5hrs |
+| Total | H | 35hrs| 36hrs | 36hrs |
 
 ## Project Schedule
 
@@ -154,6 +154,12 @@ Will probably look to use c3.js if I am able to get to the graphing portion
 ## Issues and Resolutions
 
 Potential issue is locations do not come with images, thus will need to be hard coded. To address I will limit the scope of locations a player can travel to while sourcing background images by hand. The same applies to items to be traded, though the number of those will probably be limited to 5 or less thus will not present as much of an issue.
+
+My original menu was expecting a single string as the name for the button. However i wanted to show more info on the trading buttons (Ticker, Name, Cost, Amount Owned). To resolve I instead sent an object with seperate keys in place of the single string for the name, but only for trading buttons. I then added logic in the MainMenuButton component to check for an object and use a different function for rendering the trading button
+
+Local Storage
+
+Animations
 
 ## Code Snippet
 
